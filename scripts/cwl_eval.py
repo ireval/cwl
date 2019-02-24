@@ -1,6 +1,3 @@
-__author__ = "Leif @leifos Azzopardi"
-
-
 import os
 import argparse
 from seeker.trec_qrel_handler import TrecQrelHandler
@@ -41,7 +38,7 @@ def main(results_file, qrel_file, cost_file=None, metrics_file=None, bib_file=No
     ranking_maker = None
 
     if colnames:
-        print("Topic\tMetric\tEU/I\tEU\tEC/I\tEC\tI")
+        print("Topic\tMetric\tEU\tETU\tEC\tETC\tED")
 
     with open(results_file,"r") as rf:
         while rf:
@@ -70,10 +67,8 @@ def main(results_file, qrel_file, cost_file=None, metrics_file=None, bib_file=No
                 ranking_maker.add(doc_id, element_type)
 
         #Perform the Measurements on the last topic
-        #ranking_maker.report()
         cwl_ruler.measure(ranking_maker.get_ranking())
         cwl_ruler.report()
-
 
         #Perform aggregration over all topics
 

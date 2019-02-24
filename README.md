@@ -35,12 +35,12 @@ for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL
 **Example without using a cost file.**
 When no costs are specified the cost per item is assumed to be 1.0, and EC and I will be equal.
 
-    python cwl_eval.py test_qrel_file test_result_file
+    python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file
 
 
 **Example with using a cost file.**
 
-    python cwl_eval.py test_qrel_file test_result_file -c cost_file
+    python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file -c scripts/tests/cost_file
 
 
 **Output**
@@ -48,15 +48,11 @@ A seven column tab/space seperated file that contains:
 
 - Topic ID
 - Metric Name
-- Expected Utility Per Item (EU/I)
-- Expected Utility (EU)
-- Expected Cost per Item (EC/I)
-- Expected Cost (EC)
-- Expected Number of Items to be Examined (I)
-
-
-
-
+- Expected Utility Per Item (EU)
+- Expected Utility (ETU)
+- Expected Cost per Item (EC)
+- Expected Cost (ETC)
+- Expected Depth (ED)
 
 
 Metrics within CWL EVAL
@@ -67,25 +63,19 @@ measure has been extracted and encoded within the C/W/L framework.
 All weightings have been converted to probabilities.
 
 As a result, all metrics report a series of values (not a single value):
- - Expected Utility per Item (EU/I),
- - Expected Utility (EU) or (ETU),
- - Expected Cost per Item (EC/I),
- - Expected Cost (EC) or (ETC)
- - Expected Number of Items to be Examined (I)
+ - Expected Utility per item examined (EU),
+ - Expected Total Utility (ETU),
+ - Expected Cost per item examined (EC),
+ - Expected Total Cost (ETC)
+ - Expected number of items to be examined i.e expected depth (ED)
 
-However, all the values are instrinically related, such that:
+All the values are instrinically related, such that:
 
-EU = EU/I * I
-
-and
-
-EC = EC/I * I
+ETU = EU * ED
 
 and
 
-ER = EU/EC
-
-where ER is the expected rate of gain over cost.
+ETC = EC * ED
 
 If the cost per item is 1.0, then the expected cost per item is 1.0,
 and the expected cost EC will be equal to I.
@@ -94,25 +84,26 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 
 **List of Metrics**
 
-- RR - Reciprocal Rank
-- ERR - Expected Reciprocal Rank
+- RR - (Expected) Reciprocal Rank
+- P@k - Precision At k
+- AP - Average Precision
+- RBP - Rank Biased Precision
+- INST T
+- INSQ T
+- NDCG@k - Normalized Discounted Cumulative Gain at k
 - BPM-Static - Bejewelled Player Model  - Static
 - BPM-Dynamic - Bejewelled Player Model - Dynamic
 - UMeasure - U-Measure
 - TBG - Time Biased Gain
-- P@k - Precision At k
-- RBP - Rank Biased Precision
 - IFT-C1 - Information Foraging Theory (Goal)
 - IFT-C2 - Information Foraging Theory (Rate)
 - IFT-C1-C2 - Information Foraging Theory (Goal and Rate)
-- INST T
-- INSQ T
-- DCG@k - Discounted Cumulative Gain at k
+
 
 
 **Sample Output from cwl_eval.py where costs per item = 1.0 **
 
-    python cwl_eval.py test_qrel_file test_result_file
+    python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file
 
 | Topic| Metric                                             | EU/I | EU | EC/I | EC | I |
 |------|---------------------------------------------------|-------|-------|-------|--------|--------|
@@ -152,7 +143,7 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 **Sample Output from cwl_eval.py where costs are set based on cost_file **
 
 
-    python cwl_eval.py test_qrel_file test_result_file -c test_cost_file
+    python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file -c scripts/tests/test_cost_file
 
 | Topic| Metric                                             | EU/I | EU | EC/I | EC | I |
 |------|---------------------------------------------------|-------|-------|-------|--------|--------|
@@ -191,7 +182,7 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 
 ** Using the metrics_file to specify the metrics**
 
-    python cwl_eval.py test_qrel_file test_result_file -m test_metrics_file
+    python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file -m scripts/tests/test_metrics_file
 
 if a metrics_file is not specified, CWL Eval will default to a set of metrics
 defined in ``ruler/measures/cwl_ruler.py''
@@ -204,7 +195,7 @@ An example test_metrics_file is provided, which includes the following:
     PrecisionCWLMetric(10)
     PrecisionCWLMetric(20)
     RBPCWLMetric(0.9)
-    SDCGCWLMetric(10)
+    NDCGCWLMetric(10)
     RRCWLMetric()
     APCWLMetric()
     INSTCWLMetric(1)
