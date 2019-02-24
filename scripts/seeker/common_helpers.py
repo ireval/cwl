@@ -1,13 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-#
 # seekiir Framework - Common Files
 # Helper Functions and Classes
-#
-
-__author__ = 'David Maxwell <maxwelld90@gmail.com>'
-__date__ = '2012-10-17'
 
 def file_exists(filename):
     '''

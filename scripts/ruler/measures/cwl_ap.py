@@ -6,11 +6,6 @@ from ruler.measures.cwl_metrics import CWLMetric
 '''
 (Graded) Average Precision
 
-#todo(leifos): Add Reference to AP and GAP.
-
-#todo(leifos): Still need to convert Paul's verision of AP from R to Python..
-
-
 @inproceedings{Robertson:2010:EAP:1835449.1835550,
  author = {Robertson, Stephen E. and Kanoulas, Evangelos and Yilmaz, Emine},
  title = {Extending Average Precision to Graded Relevance Judgments},

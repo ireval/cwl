@@ -5,7 +5,6 @@ from ruler.measures.cwl_metrics import CWLMetric
 
 '''
 U-Measure
-#TODO(leifos) add reference to Zhou and Sakai (2013)
 
 @inproceedings{Sakai:2013:SRR:2484028.2484031,
  author = {Sakai, Tetsuya and Dou, Zhicheng},

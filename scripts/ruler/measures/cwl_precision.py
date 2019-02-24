@@ -10,9 +10,6 @@ if the gains are set to 0..1.0 then graded precision is calculated
 Note that CG@k / R@k and P@k are essentially related.
 where the EU/Doc is P@k, while the EU/Serp (ETU) is CG@k or R@k
 
-#TODO(leifos): Reference for Precision Measures...
-
-
 '''
 
 

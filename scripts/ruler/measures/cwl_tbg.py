@@ -5,7 +5,6 @@ from ruler.measures.cwl_metrics import CWLMetric
 
 '''
 Time Biased Gain
-#TODO(leifos) add reference to Smucker & Clarke
 
 H is the halflife which stipulates how quickly the gain decays over time
 
