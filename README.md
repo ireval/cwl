@@ -30,7 +30,7 @@ for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL
                output to a file called <bibtex_file>
 
 
-- -n: Add -n flag to output column names (e.g. Topic, Metric, EU/I, EU, EC/I, EC, I)
+- -n: Add -n flag to output column names (e.g. Topic, Metric, EU, ETU, EC, ETC, ED)
 
 **Example without using a cost file.**
 When no costs are specified the cost per item is assumed to be 1.0, and EC and I will be equal.
@@ -105,7 +105,7 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 
     python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file
 
-| Topic| Metric                                             | EU/I | EU | EC/I | EC | I |
+| Topic| Metric                                             | EU | ETU | EC | ETC | ED |
 |------|---------------------------------------------------|-------|-------|-------|--------|--------|
 | T1   | P@20                                              | 0.150 | 3.000 | 1.000 | 20.000 | 20.000 |
 | T1   | P@10                                              | 0.300 | 3.000 | 1.000 | 10.000 | 10.000 |
@@ -145,7 +145,7 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 
     python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file -c scripts/tests/test_cost_file
 
-| Topic| Metric                                             | EU/I | EU | EC/I | EC | I |
+| Topic| Metric                                             | EU | ETU | EC | ETC | ED |
 |------|---------------------------------------------------|-------|-------|-------|--------|--------|
 | T1   | P@20                                              | 0.150 | 3.000 | 1.650 | 33.000 | 20.000 |
 | T1   | P@10                                              | 0.300 | 3.000 | 2.300 | 23.000 | 10.000 |
