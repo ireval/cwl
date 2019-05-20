@@ -55,6 +55,20 @@ A seven column tab/space seperated file that contains:
 - Expected Depth (ED)
 
 
+CWL Citation
+------------
+Please consider citing the following paper when using our code for your evaluations:
+
+        @inproceedings{azzopardi2019cwl,
+            author = {Azzopardi, Leif and Thomas, Paul and Moffat, Alistair},
+            title = {cwl\_eval: An Evaluation Tool for Information Retrieval},
+            booktitle = {Proc. of the 42nd International ACM SIGIR Conference},
+            series = {SIGIR '19},
+            year = {2019}
+        } 
+
+
+
 Metrics within CWL EVAL
 -----------------------
 For each of the metrics provided in cwl_eval.py, the user model for each

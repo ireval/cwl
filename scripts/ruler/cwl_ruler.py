@@ -229,10 +229,22 @@ class CWLRuler(object):
 
     def save_bibtex(self, bib_file):
 
-        bib_list = []
+        eval_tool_bibtex = """
+        @inproceedings{azzopardi2019cwl,
+        author = {Azzopardi, Leif and Thomas, Paul and Moffat, Alistair}
+        title = {cwl\_eval: An Evaluation Tool for Information Retrieval},
+        booktitle = {Proc. of the 42nd International ACM SIGIR Conference},
+        series = {SIGIR '19},
+        year = {2019} 
+        }
+        """
+
+        bib_list = [ eval_tool_bibtex ]
+
         for m in self.metrics:
             if m.bibtex not in bib_list:
                 bib_list.append(m.bibtex)
+
         with open(bib_file,"w") as bf:
             for bib in bib_list:
                 bf.write(bib)
