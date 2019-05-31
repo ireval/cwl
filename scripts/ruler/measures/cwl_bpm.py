@@ -76,30 +76,33 @@ class BPMCWLMetric(CWLMetric):
         return "BPM-Static-T={0}-K={1}".format(self.T,self.K)
 
 
-    def c_vector(self, ranking):
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        costs = ranking.get_cost_vector(worse_case)
 
-        c_gain = np.cumsum(ranking.gains)
-        c_cost = np.cumsum(ranking.costs)
+        c_gain = np.cumsum(gains)
+        c_cost = np.cumsum(costs)
 
         # GAIN Constraint
-        rr_cvec = np.zeros(len(ranking.gains))
+        rr_cvec = np.zeros(len(gains))
         i = 0
         # continue until the gain accumulated exceeds T
-        while i < len(ranking.gains) and (c_gain[i] < self.T):
+        while i < len(gains) and (c_gain[i] < self.T):
             rr_cvec[i] = 1.0
             i = i + 1
+
         # COST Constraint
-        p_cvec = np.zeros(len(ranking.costs))
+        p_cvec = np.zeros(len(costs))
         i = 0
         # continue until the costs accumulated exceeds K
-        while i < len(ranking.costs) and (c_cost[i] < self.K):
+        while i < len(costs) and (c_cost[i] < self.K):
             p_cvec[i] = 1.0
             i = i + 1
 
-        # combine the two continuation bectors
-        bpm_cvec = np.zeros(len(ranking.costs))
+        # combine the two continuation vectors
+        bpm_cvec = np.zeros(len(costs))
         i = 0
-        while i < len(ranking.costs):
+        while i < len(costs):
             if (rr_cvec[i] == 1.0) and (p_cvec[i] == 1.0):
                 bpm_cvec[i] = 1.0
             i = i + 1
@@ -135,39 +138,38 @@ class BPMDCWLMetric(CWLMetric):
     def name(self):
         return "BPM-Dynamic-T={0}-K={1}-hb={2}-hc={3}".format(self.T,self.K, self.hb, self.hc)
 
-    def c_vector(self, ranking):
-
-        c_gain = np.cumsum(ranking.gains)
-        c_cost = np.cumsum(ranking.costs)
-        #print(c_gain[0:11])
-        #print(c_cost[0:11])
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        costs = ranking.get_cost_vector(worse_case)
+        c_gain = np.cumsum(gains)
+        c_cost = np.cumsum(costs)
 
         # GAIN Constraint
-        rr_cvec = np.zeros(len(ranking.gains))
+        rr_cvec = np.zeros(len(gains))
         i = 0
         T = self.T
         # continue until the gain accumulated exceeds T
-        while i < len(ranking.gains) and (c_gain[i] < T):
+        while i < len(gains) and (c_gain[i] < T):
             rr_cvec[i] = 1.0
             # Now Update T, depending on gain[i]
-            T = T + self.hb * (ranking.gains[i] - self.gain_med )
+            T = T + self.hb * (gains[i] - self.gain_med)
 
             i = i + 1
         # COST Constraint
-        p_cvec = np.zeros(len(ranking.costs))
+        p_cvec = np.zeros(len(costs))
         i = 0
         K = self.K
         # continue until the costs accumulated exceeds K
-        while i < len(ranking.costs) and (c_cost[i] < K):
+        while i < len(costs) and (c_cost[i] < K):
             p_cvec[i] = 1.0
             # Now Update K, depending on gain[i]
-            T = T + self.hc * ( ranking.gains[i] - self.gain_med)
+            T = T + self.hc * (gains[i] - self.gain_med)
             i = i + 1
 
-        # combine the two continuation bectors
-        bpm_cvec = np.zeros(len(ranking.costs))
+        # combine the two continuation vectors
+        bpm_cvec = np.zeros(len(costs))
         i = 0
-        while i < len(ranking.costs):
+        while i < len(costs):
             if (rr_cvec[i] == 1.0) and (p_cvec[i] == 1.0):
                 bpm_cvec[i] = 1.0
             i = i + 1

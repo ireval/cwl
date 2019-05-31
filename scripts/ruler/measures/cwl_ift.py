@@ -40,20 +40,19 @@ class IFTGoalCWLMetric(CWLMetric):
     def name(self):
         return "IFT-C1-T={0}-b1={1}-R1={2}".format(self.T, self.b1, self.R1)
 
-    def c_vector(self, ranking):
-        cgains = np.cumsum(ranking.gains)
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        c_gains = np.cumsum(gains)
         cvec = []
-        for i in range(0,len(ranking.gains)):
-            c1 = self.c1_func(cgains[i])
+        for i in range(0, len(gains)):
+            c1 = self.c1_func(c_gains[i])
             cvec.append(c1)
-
         cvec = np.array(cvec)
-
         return cvec
 
     def c1_func(self, yi):
-        ex = (1.0 + self.b1 * math.pow(math.e, ((self.T-yi)* self.R1)))
-        return 1.0 - math.pow(ex,-1.0)
+        ex = (1.0 + self.b1 * math.pow(math.e, ((self.T-yi) * self.R1)))
+        return 1.0 - math.pow(ex, -1.0)
 
 
 class IFTRateCWLMetric(CWLMetric):
@@ -77,21 +76,24 @@ class IFTRateCWLMetric(CWLMetric):
     def name(self):
         return "IFT-C2-A={0}-b2={1}-R2={2}".format(self.A, self.b2, self.R2)
 
-    def c_vector(self, ranking):
-        cgains = np.cumsum(ranking.gains)
-        ccosts = np.cumsum(ranking.costs)
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        costs = ranking.get_cost_vector(worse_case)
+
+        c_gains = np.cumsum(gains)
+        c_costs = np.cumsum(costs)
         cvec = []
-        for i in range(0,len(ranking.gains)):
-            c2 = self.c2_func(cgains[i],ccosts[i])
+        for i in range(0, len(gains)):
+            c2 = self.c2_func(c_gains[i], c_costs[i])
             cvec.append(c2)
 
         cvec = np.array(cvec)
 
         return cvec
 
-    def c2_func(self, yi,ki):
-        ex = (1.0 + self.b2 * math.pow(math.e, ((self.A - (yi/ki))* self.R2)))
-        return math.pow(ex,-1.0)
+    def c2_func(self, yi, ki):
+        ex = (1.0 + self.b2 * math.pow(math.e, ((self.A - (yi/ki)) * self.R2)))
+        return math.pow(ex, -1.0)
 
 
 class IFTGoalRateCWLMetric(CWLMetric):
@@ -120,25 +122,26 @@ class IFTGoalRateCWLMetric(CWLMetric):
     def name(self):
         return "IFT-C1-C2-T={0}-b1={1}-R1={2}-A={3}-b2={4}-R2={5}".format(self.T, self.b1, self.R1, self.A, self.b2, self.R2)
 
-    def c_vector(self, ranking):
-        cgains = np.cumsum(ranking.gains)
-        ccosts = np.cumsum(ranking.costs)
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        costs = ranking.get_cost_vector(worse_case)
+        c_gains = np.cumsum(gains)
+        c_costs = np.cumsum(costs)
         cvec = []
-        for i in range(0,len(ranking.gains)):
+        for i in range(0, len(gains)):
 
-            c1 = self.c1_func(cgains[i])
-            c2 = self.c2_func(cgains[i],ccosts[i])
+            c1 = self.c1_func(c_gains[i])
+            c2 = self.c2_func(c_gains[i], c_costs[i])
             cvec.append(c1*c2)
 
         cvec = np.array(cvec)
 
         return cvec
 
-    def c2_func(self, yi,ki):
-        ex = (1.0 + self.b2 * math.pow(math.e, ((self.A - (yi/ki))* self.R2)))
-        return math.pow(ex,-1.0)
-
+    def c2_func(self, yi, ki):
+        ex = (1.0 + self.b2 * math.pow(math.e, ((self.A - (yi/ki)) * self.R2)))
+        return math.pow(ex, -1.0)
 
     def c1_func(self, yi):
-        ex = (1.0 + self.b1 * math.pow(math.e, ((self.T-yi)* self.R1)))
-        return 1.0 - math.pow(ex,-1.0)
+        ex = (1.0 + self.b1 * math.pow(math.e, ((self.T-yi) * self.R1)))
+        return 1.0 - math.pow(ex, -1.0)

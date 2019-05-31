@@ -41,6 +41,6 @@ class RBPCWLMetric(CWLMetric):
     def name(self):
         return "RBP@{0}".format(self.theta)
 
-    def c_vector(self, ranking):
-        cvec = np.dot(np.ones(len(ranking.gains)), self.theta)
+    def c_vector(self, ranking, worse_case=True):
+        cvec = np.dot(np.ones(ranking.n), self.theta)
         return cvec

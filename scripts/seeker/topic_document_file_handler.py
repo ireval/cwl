@@ -1,3 +1,4 @@
+import numpy as np
 from seeker.common_helpers import file_exists
 from seeker.common_helpers import AutoVivification
 
@@ -17,7 +18,7 @@ class TopicDocumentFileHandler(object):
         doc = parts[0]
         value = parts[2].strip()
         if topic and doc:
-            self.qrels[topic][doc] =  float(value)
+            self.qrels[topic][doc] = float(value)
 
     def _get_out_line(self, topic, doc):
         # outputs the topic document and value in a specific way.
@@ -25,7 +26,7 @@ class TopicDocumentFileHandler(object):
 
     def read_file(self, filename):
         if file_exists(filename):
-            infile = open(filename, "r" )
+            infile = open(filename, "r")
             while infile:
                 line = infile.readline()
                 if not line:
@@ -42,26 +43,25 @@ class TopicDocumentFileHandler(object):
 
         for t in self.get_topic_list():
             for d in self.get_doc_list(t):
-                out_line = self._get_out_line(t,d)
-                outfile.write (out_line)
+                out_line = self._get_out_line(t, d)
+                outfile.write(out_line)
 
         outfile.close()
-
 
     def get_value(self, topic, doc):
         if topic not in self.data:
             return 0.0
         
         if self.data[topic][doc]:
-            return (self.data[topic][doc])
+            return self.data[topic][doc]
         else:
             return 0.0
     
     def get_value_if_exists(self, topic, doc):
-        if topic not in self.data:
+        if topic not in self.data.keys():
             return None
-        
-        if self.data[topic][doc]:
+
+        if doc in self.data[topic].keys():
             return int(self.data[topic][doc])
         else:
             return None
@@ -93,4 +93,4 @@ class TopicDocumentFileHandler(object):
             self.data[topic][doc] = value
 
     def __str__(self):
-        return  'TOPICS READ IN: ' + str(len(self.data))
+        return 'TOPICS READ IN: ' + str(len(self.data))

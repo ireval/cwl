@@ -14,12 +14,12 @@ class INSQCWLMetric(CWLMetric):
     def name(self):
         return "INSQ-T={0}".format(self.T)
 
-    def c_vector(self, ranking):
-        # precision for k = len(gains)
-        cg = np.cumsum(ranking.gains)
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        cg = np.cumsum(gains)
         cvec = []
         for i in range(0, len(cg)):
-            ci = (((i+1.0)+ (2.0 *self.T)-1.0) / ((i+1.0)+ (2.0 * self.T)))**2.0
+            ci = (((i+1.0) + (2.0 * self.T)-1.0) / ((i+1.0) + (2.0 * self.T)))**2.0
             cvec.append(ci)
 
         cvec = np.array(cvec)

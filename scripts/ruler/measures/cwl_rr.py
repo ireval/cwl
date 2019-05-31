@@ -32,14 +32,13 @@ class RRCWLMetric(CWLMetric):
     def name(self):
         return "RR"
 
-    def c_vector(self, ranking):
-
-        cvec = np.zeros(len(ranking.gains))
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        cvec = np.zeros(len(gains))
         i = 0
         found_gain = False
-        while i < len(ranking.gains) and not found_gain:
-
-            if (ranking.gains[i] > 0):
+        while i < len(gains) and not found_gain:
+            if (gains[i] > 0):
                 found_gain = True
             else:
                 cvec[i] = 1.0
@@ -70,13 +69,8 @@ class ERRCWLMetric(CWLMetric):
     def name(self):
         return "ERR"
 
-    def c_vector(self, ranking):
-        '''
-        :param gains: all gains must be between one and zero
-        :param costs: cost vectors can be any real value, i.e. can be greater than one, but is not used for ERR.
-        :return: the continuation vector for ERR
-        '''
-
-        cvec = np.subtract(np.ones(len(ranking.gains))-ranking.gains)
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
+        cvec = np.subtract(np.ones(len(gains)-gains))
 
         return cvec

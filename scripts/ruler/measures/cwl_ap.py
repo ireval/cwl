@@ -2,7 +2,6 @@ import numpy as np
 import math
 from ruler.measures.cwl_metrics import CWLMetric
 
-
 '''
 (Graded) Average Precision
 
@@ -26,32 +25,24 @@ class APCWLMetric(CWLMetric):
         self.metric_name = "AP"
         self.bibtex = ""
 
-
     def name(self):
         return self.metric_name
 
-
-    def c_vector(self, ranking):
-        '''
-        Doesn't metric need to know all the relevant items??
-        :param gains:
-        :param costs:
-        :return:
-        '''
+    def c_vector(self, ranking, worse_case=True):
+        gains = ranking.get_gain_vector(worse_case)
         rels = 0
-        for g in ranking.gains:
+        for g in gains:
             if g > 0.0:
                 rels += 1
-        rm = int(ranking.total_rels) - rels
+        rm = int(ranking.get_total_rels(worse_case)) - rels
 
-        n = len(ranking.gains)
+        n = len(gains)
         rii = []
         cvec = []
-        for i in range(0,n):
-            rii.append(ranking.gains[i]/(i+1))
+        for i in range(0, n):
+            rii.append(gains[i]/(i+1))
 
-
-        for i in range(0,n-1):
+        for i in range(0, n-1):
             bot = np.sum(rii[i:n])
             top = np.sum(rii[i+1:n])
 
@@ -61,9 +52,7 @@ class APCWLMetric(CWLMetric):
                 cvec.append(0.0)
 
         cvec.append(0.0)
-
         cvec = np.array(cvec)
-
         return cvec
 
 
@@ -73,19 +62,16 @@ class TrueAPCWLMetric(CWLMetric):
         self.metric_name = "TrAP"
         self.bibtex = ""
 
-
     def name(self):
         return self.metric_name
 
-
-    def c_vector(self, ranking):
-
-        wvec = self.w_vector(ranking)
+    def c_vector(self, ranking, worse_case=True):
+        wvec = self.w_vector(ranking, worse_case)
 
         cvec = []
-        for i in range(0,len(wvec)-1):
-            if(wvec[i]>0.0):
-                cvec.append( wvec[i+1]/ wvec[i])
+        for i in range(0, len(wvec)-1):
+            if wvec[i] > 0.0:
+                cvec.append(wvec[i+1] / wvec[i])
             else:
                 cvec.append(0.0)
 
@@ -94,25 +80,19 @@ class TrueAPCWLMetric(CWLMetric):
 
         return cvec
 
-
-    def w_vector(self, ranking):
-
+    def w_vector(self, ranking, worse_case=True):
         wvec = []
-        ccosts = np.cumsum(ranking.costs)
-        ggains = np.cumsum(ranking.gains)
+        c_costs = np.cumsum(ranking.get_cost_vector(worse_case))
+        c_gains = np.cumsum(ranking.get_gain_vector(worse_case))
 
         i = 0
-        while (ggains[i] == 0) and (i < len(ggains)-1):
-            ggains[i] = 1.0
+        while (c_gains[i] == 0) and (i < len(c_gains)-1):
+            c_gains[i] = 1.0
             i += 1
 
-        print(ggains[0:10])
-
-        wvec = np.divide(ggains,ccosts)
-        #print(wvec[0:10])
-        #print(ranking.total_rels)
-        if ranking.total_rels > 0:
-            wvec = wvec / ranking.total_rels
-        #print(wvec[0:10])
+        total_rels = ranking.get_total_rels(worse_case)
+        wvec = np.divide(c_gains, c_costs)
+        if total_rels > 0:
+            wvec = wvec / total_rels
 
         return np.array(wvec)

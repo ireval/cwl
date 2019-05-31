@@ -1,5 +1,3 @@
-__author__ = "Leif Azzopardi"
-
 import os
 import inspect
 import importlib
@@ -16,70 +14,11 @@ from ruler.measures.cwl_tbg import *
 from ruler.measures.cwl_bpm import *
 from ruler.measures.cwl_umeasure import *
 from ruler.measures.cwl_ift import *
-
-class Ranking(object):
-    def __init__(self, topic_id, gains, costs):
-        self.topic_id = topic_id
-        self.gains = gains
-        self.costs = costs
-        self.total_gain = 0.0
-        self.total_rels = 0.0
-        for g in gains:
-            self.total_gain += g
-            if g > 0.0:
-                self.total_rels += 1.0
-
-    def report(self):
-        if self.show_report:
-            print("Topic: {0}".format(self.topic_id))
-            print(self.topic_id,self.gains[:10])
-            print(self.topic_id,self.costs[:10])
-
-class RankingMaker(object):
-    def __init__(self, topic_id, gain_handler, cost_dict=None):
-        self.topic_id = topic_id
-        self.qgains = gain_handler
-        self.qcosts = cost_dict
-        self.total_gain = 0.0
-        self.total_rels = 0.0
-        self.gains = []
-        self.costs = []
-        self.show_report = False
-        #self.seen = {}
-
-    def add(self, doc_id, element_type):
-        gain = self.qgains.get_value(self.topic_id, doc_id)
-        self.gains.append(gain)
-        cost = self.get_cost(doc_id, element_type)
-        self.costs.append(cost)
-
-    def get_cost(self, doc_id, element_type):
-        if self.qcosts is None:
-            return 1.0
-        else:
-            if element_type in self.qcosts:
-                return self.qcosts[element_type]
-            else:
-                return 1.0
-        # Add in object accessor to map element type to costs for the docid
-        return 1.0
-
-
-    def get_ranking(self):
-        ranking =  Ranking(self.topic_id, self.gains, self.costs)
-        ranking.total_rels = self.qgains.get_total_rels(self.topic_id)
-        ranking.total_gain = self.qgains.get_total_gains(self.topic_id)
-        return ranking
-
-    def report(self):
-        if self.show_report:
-            print("Topic: {0}".format(self.topic_id))
-            print(self.topic_id,self.gains[:10])
-            print(self.topic_id,self.costs[:10])
+from ruler.ranking import Ranking
 
 class CWLRuler(object):
 
-    def __init__(self, metrics_file=None):
+    def __init__(self, metrics_file=None, residuals=False):
         self.metrics = []
         #add the metrics to the list
         if metrics_file:
@@ -92,29 +31,26 @@ class CWLRuler(object):
             # for instance, U-measure costs are in characters, while TBG costs are in seconds
             # if costs are not specified, then the cost of each item is 1.0
             self.metrics = [
-                         PrecisionCWLMetric(1),
-                         PrecisionCWLMetric(2),
-                         PrecisionCWLMetric(3),
-                         PrecisionCWLMetric(4),
-                         PrecisionCWLMetric(5),
-                         PrecisionCWLMetric(6),
-                         PrecisionCWLMetric(7),
-                         PrecisionCWLMetric(8),
-                         PrecisionCWLMetric(9),
-                         PrecisionCWLMetric(10),
-                         RBPCWLMetric(0.9),
-                         NDCGCWLMetric(10),
-                         RRCWLMetric(),
-                         APCWLMetric(),
-                         INSTCWLMetric(2.0),
-                         INSQCWLMetric(2.0),
-                         #BPMCWLMetric(2.0, 10),
-                         #BPMDCWLMetric(2.0, 10),
-                         #UMeasureCWLMetric(50),
-                         #TBGCWLMetric(22),
-                         #IFTGoalRateCWLMetric(2.0, 0.9, 10, 0.2, 0.9, 10),
-                         #IFTGoalRateCWLMetric(2.0, 0.9, 100, 0.2, 0.9, 100),
-                         ]
+                PrecisionCWLMetric(1),
+                PrecisionCWLMetric(2),
+                PrecisionCWLMetric(3),
+                PrecisionCWLMetric(4),
+                PrecisionCWLMetric(5),
+                PrecisionCWLMetric(10),
+                RBPCWLMetric(0.2),
+                RBPCWLMetric(0.4),
+                RBPCWLMetric(0.8),
+                NDCGCWLMetric(5),
+                NDCGCWLMetric(10),
+                RRCWLMetric(),
+                APCWLMetric(),
+                INSTCWLMetric(1.0),
+                INSTCWLMetric(2.0),
+                INSTCWLMetric(3.0),
+            ]
+
+        for m in self.metrics:
+            m.residuals = residuals
 
     def measure(self, ranking):
         for metric in self.metrics:
@@ -176,7 +112,8 @@ class CWLRuler(object):
             class_ref = class_tuple[1]
 
             if class_name == requested_class_name:
-                ref = class_ref(*casted_args)  # Instantiate the class with parameters! If you want to use parameter names, try kwargs instead.
+                ref = class_ref(*casted_args)  # Instantiate the class with parameters!
+                # If you want to use parameter names, try kwargs instead.
 
         # If ref is not set, the class was not located!
         if ref is None:
@@ -192,7 +129,7 @@ class CWLRuler(object):
         modules = []
         classes = []
         path = os.path.dirname(os.path.abspath(__file__))
-        measures_path = os.path.join(path,'measures')
+        measures_path = os.path.join(path, 'measures')
         package_path = 'ruler.measures'
 
         # List through the modules in the specified package, ignoring __init__.py, and append them to a list.
@@ -206,7 +143,8 @@ class CWLRuler(object):
         for module in modules:
             module_references.append(importlib.import_module(module))
 
-        # Now loop through each module, looking at the classes within it - and then append each class to a list of valid classes.
+        # Now loop through each module, looking at the classes within it -
+        # and then append each class to a list of valid classes.
         for module in module_references:
             for name, obj in inspect.getmembers(module):
                 if inspect.isclass(obj):
@@ -239,13 +177,13 @@ class CWLRuler(object):
         }
         """
 
-        bib_list = [ eval_tool_bibtex ]
+        bib_list = [eval_tool_bibtex]
 
         for m in self.metrics:
             if m.bibtex not in bib_list:
                 bib_list.append(m.bibtex)
 
-        with open(bib_file,"w") as bf:
+        with open(bib_file, "w") as bf:
             for bib in bib_list:
                 bf.write(bib)
                 bf.write("\n")

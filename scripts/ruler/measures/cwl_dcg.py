@@ -7,8 +7,7 @@ from ruler.measures.cwl_metrics import CWLMetric
 Discounted Cumulative Gain: scaled so that the discount is a probability distribution
 
 k is the rank cut off i.e number of items to be examined
-
-#TODO(leifos): Don't we have to re-scaled the weighting is k is less than infinite?
+base is the base of the log for the discounting, which is set to 2 by default as per the original paper.
 
 
 @article{Jarvelin:2002:CGE:582415.582418,
@@ -28,8 +27,9 @@ k is the rank cut off i.e number of items to be examined
 class NDCGCWLMetric(CWLMetric):
     def __init__(self, k):
         super(CWLMetric, self).__init__()
-        self.metric_name = "NDCG-k@{0} ".format(k)
+        self.metric_name = "NDCG-k@{0}".format(k)
         self.k = k
+        self.base = 2.0
         self.bibtex = """
         @article{Jarvelin:2002:CGE:582415.582418,
         author = {J\"{a}rvelin, Kalervo and Kek\"{a}l\"{a}inen, Jaana},
@@ -45,14 +45,14 @@ class NDCGCWLMetric(CWLMetric):
         """
 
     def name(self):
-        return "NDCG-k@{0} ".format(self.k)
+        return "NDCG-k@{0}".format(self.k)
 
-    def c_vector(self, ranking):
+    def c_vector(self, ranking, worse_case=True):
 
         cvec = []
-        for i in range(1,len(ranking.gains)+1):
+        for i in range(1, ranking.n+1):
             if i < self.k:
-                cvec.append(math.log(i+1,2)/math.log(i+2,2))
+                cvec.append(math.log(i+1, self.base)/math.log(i+2, self.base))
             else:
                 cvec.append(0.0)
 

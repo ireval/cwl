@@ -19,8 +19,6 @@ H is the halflife which stipulates how quickly the gain decays over time
  numpages = {10},
  url = {http://doi.acm.org/10.1145/2348283.2348300},
 } 
-
-
 '''
 
 class TBGCWLMetric(CWLMetric):
@@ -45,13 +43,11 @@ class TBGCWLMetric(CWLMetric):
     def name(self):
         return "TBG-H@{0} ".format(self.halflife)
 
-    def c_vector(self, ranking):
-
-        wvec = self.w_vector(ranking)
-
+    def c_vector(self, ranking, worse_case=True):
+        wvec = self.w_vector(ranking, worse_case)
         cvec = []
-        for i in range(0,len(wvec)-1):
-            if(wvec[i]>0.0):
+        for i in range(0, len(wvec)-1):
+            if wvec[i] > 0.0:
                 cvec.append( wvec[i+1]/ wvec[i])
             else:
                 cvec.append(0.0)
@@ -61,18 +57,17 @@ class TBGCWLMetric(CWLMetric):
 
         return cvec
 
-
-    def w_vector(self, ranking):
-
+    def w_vector(self, ranking, worse_case=True):
+        costs = ranking.get_cost_vector(worse_case)
         wvec = []
-        ccosts = np.cumsum(ranking.costs)
+        c_costs = np.cumsum(costs)
         start = 0.0
 
         norm = self.integral_decay(0.0)
         wvec.append(norm)
 
-        for i in range(0,len(ccosts)-1):
-            weight_i = self.integral_decay(ccosts[i])
+        for i in range(0, len(c_costs)-1):
+            weight_i = self.integral_decay(c_costs[i])
             norm = norm + weight_i
             wvec.append(weight_i)
 
@@ -81,4 +76,4 @@ class TBGCWLMetric(CWLMetric):
 
     def integral_decay(self, x):
         h = self.halflife
-        return (h * (2.0 ** (-x/h)) )/ math.log(2.0, math.e)
+        return (h * (2.0 ** (-x/h))) / math.log(2.0, math.e)

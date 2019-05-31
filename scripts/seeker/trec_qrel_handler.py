@@ -2,6 +2,7 @@ from seeker.common_helpers import file_exists
 from seeker.common_helpers import AutoVivification
 from seeker.topic_document_file_handler import TopicDocumentFileHandler
 
+
 class TrecQrelHandler(TopicDocumentFileHandler):
 
     def __init__(self, filename=None):
@@ -23,21 +24,19 @@ class TrecQrelHandler(TopicDocumentFileHandler):
     def _get_out_line(self, topic, doc):
         # outputs the topic document and value as the TREC QREL Format with iteration default to zero
         return "%s 0 %s %d\n" % (topic, doc, self.data[topic][doc])
-    
-    
 
     def get_total_gains(self, topic):
 
         doc_list = self.get_doc_list(topic)
         gain = 0.0
         for doc in doc_list:
-            gain += self.get_value(topic,doc)
+            gain += self.get_value(topic, doc)
         return gain
 
     def get_total_rels(self, topic):
         doc_list = self.get_doc_list(topic)
         rels = 0.0
         for doc in doc_list:
-            if self.get_value(topic,doc) > 0.0:
+            if self.get_value(topic, doc) > 0.0:
                 rels += 1.0
         return rels
