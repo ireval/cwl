@@ -55,7 +55,8 @@ hb and hc are therefore scaling parameters.
 class BPMCWLMetric(CWLMetric):
 
     def __init__(self, T=1, K=10):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "BPM-Static-T={0}-K={1}".format(T,K)
         self.T = T # E_b the total amount of benefit desired
         self.K = K # E_c the total amount of cost or documents willing to be examined
@@ -114,8 +115,9 @@ class BPMCWLMetric(CWLMetric):
 
 class BPMDCWLMetric(CWLMetric):
 
-    def __init__(self, T=1, K=10, hb=1.0, hc=1.0, gain_med = 0.5):
-        super(CWLMetric, self).__init__()
+    def __init__(self, T=1, K=10, hb=1.0, hc=1.0, gain_med=0.5):
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "BPM-Dynamic-T={0}-K={1}-hb={2}-hc={3}".format(T,K,hb,hc)
         self.T = T # E_b the total amount of benefit desired
         self.K = K # E_c the total amount of cost or documents willing to be examined

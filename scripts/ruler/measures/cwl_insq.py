@@ -6,7 +6,8 @@ from ruler.measures.cwl_metrics import CWLMetric
 class INSQCWLMetric(CWLMetric):
 
     def __init__(self, T=1.0):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "INSQ-T={0}    ".format(T)
         self.T = T
         self.bibtex = ""

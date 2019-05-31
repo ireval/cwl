@@ -23,7 +23,8 @@ H is the halflife which stipulates how quickly the gain decays over time
 
 class TBGCWLMetric(CWLMetric):
     def __init__(self, halflife=224):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "TBG-H@{0} ".format(halflife)
         self.halflife = halflife
         self.bibtex = """

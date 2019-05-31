@@ -26,7 +26,8 @@ base is the base of the log for the discounting, which is set to 2 by default as
 
 class NDCGCWLMetric(CWLMetric):
     def __init__(self, k):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "NDCG-k@{0}".format(k)
         self.k = k
         self.base = 2.0

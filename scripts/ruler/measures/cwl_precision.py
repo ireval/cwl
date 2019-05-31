@@ -16,7 +16,8 @@ where the EU/Doc is P@k, while the EU/Serp (ETU) is CG@k or R@k
 class PrecisionCWLMetric(CWLMetric):
 
     def __init__(self, k=10):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "P@{0}".format(k)
         self.k = k
         self.bibtex = ""

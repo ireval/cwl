@@ -29,7 +29,8 @@ depending on whether gain is binary (0,1) or graded (0..1.0)
 class INSTCWLMetric(CWLMetric):
 
     def __init__(self, T = 1.0):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "INST-T={0}    ".format(T)
         self.T = T
         self.bibtex = """

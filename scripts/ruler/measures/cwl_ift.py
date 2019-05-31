@@ -21,7 +21,8 @@ Information Foraging Based Measure
 
 class IFTGoalCWLMetric(CWLMetric):
     def __init__(self, T, b1, R1):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "IFT-C1-T={0}-b1={1}-R1={2}".format(T,b1,R1)
         self.b1 = b1
         self.T = T
@@ -57,7 +58,8 @@ class IFTGoalCWLMetric(CWLMetric):
 
 class IFTRateCWLMetric(CWLMetric):
     def __init__(self, A, b2,  R2):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "IFT-C2-A={0}-b2={1}-R2={2}".format(A, b2, R2)
         self.b2 = b2
         self.A = A
@@ -98,7 +100,8 @@ class IFTRateCWLMetric(CWLMetric):
 
 class IFTGoalRateCWLMetric(CWLMetric):
     def __init__(self, T, b1, R1, A, b2,  R2):
-        super(CWLMetric, self).__init__()
+        CWLMetric.__init__(self)
+        # super(CWLMetric, self).__init__()
         self.metric_name = "IFT-C1-C2-T={0}-b1={1}-R1={2}-A={3}-b2={4}-R2={5}".format(T, b1, R1, A, b2, R2)
         self.b1 = b1
         self.T = T
