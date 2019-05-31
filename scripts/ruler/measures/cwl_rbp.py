@@ -21,8 +21,8 @@ from ruler.measures.cwl_metrics import CWLMetric
 class RBPCWLMetric(CWLMetric):
 
     def __init__(self, theta=0.9):
-        CWLMetric.__init__(self)
-        #super(CWLMetric, self).__init__()
+        #CWLMetric.__init__(self)
+        super().__init__()
         self.metric_name = "RBP@{0}".format(theta)
         self.theta = theta
         self.bibtex = """

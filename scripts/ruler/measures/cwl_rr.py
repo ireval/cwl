@@ -25,8 +25,7 @@ ERR
 class RRCWLMetric(CWLMetric):
 
     def __init__(self):
-        CWLMetric.__init__(self)
-        # super(CWLMetric, self).__init__()
+        super().__init__()
         self.metric_name = "RR"
         self.bibtex = ""
 
@@ -51,8 +50,7 @@ class RRCWLMetric(CWLMetric):
 class ERRCWLMetric(CWLMetric):
 
     def __init__(self):
-        CWLMetric.__init__(self)
-        # super(CWLMetric, self).__init__()
+        super().__init__()
         self.metric_name = "ERR"
         self.bibtex = """
         @inproceedings{Chapelle:2009:ERR:1645953.1646033,

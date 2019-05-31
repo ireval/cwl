@@ -13,8 +13,7 @@ Note that NPV is equivalent to RBP where theta = 1/(1+rate)
 class NPVCWLMetric(CWLMetric):
 
     def __init__(self, rate=0.1):
-        CWLMetric.__init__(self)
-        # super(CWLMetric, self).__init__()
+        super().__init__()
         self.metric_name = "NPV-r@{0}".format(rate)
         self.rate = rate
         self.bibtex = """

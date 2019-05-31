@@ -21,8 +21,7 @@ from ruler.measures.cwl_metrics import CWLMetric
 
 class APCWLMetric(CWLMetric):
     def __init__(self):
-        CWLMetric.__init__(self)
-        # super(CWLMetric, self).__init__()
+        super().__init__()
         self.metric_name = "AP"
         self.bibtex = ""
 

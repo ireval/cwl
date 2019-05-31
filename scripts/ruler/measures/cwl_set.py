@@ -22,8 +22,7 @@ when beta = 1.0 and k =k, then user model is equivalent to the P@k user model.
 class SETCWLMetric(CWLMetric):
 
     def __init__(self, beta=0.5, k=10):
-        CWLMetric.__init__(self)
-        # super(CWLMetric, self).__init__()
+        super().__init__()
         self.k = k
         self.beta = beta
         self.metric_name = self.name()

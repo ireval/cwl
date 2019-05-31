@@ -23,8 +23,7 @@ U-Measure
 
 class UMeasureCWLMetric(CWLMetric):
     def __init__(self, L=1000):
-        CWLMetric.__init__(self)
-        # super(CWLMetric, self).__init__()
+        super().__init__()
         self.metric_name = "U-L@{0} ".format(L)
         self.L = L
         self.bibtex = """
