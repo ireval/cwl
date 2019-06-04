@@ -83,10 +83,10 @@ class TopicDocumentFileHandler(object):
     def get_topic_doc_dict(self):
         return self.data
 
-    def add_topic_doc(self,topic, doc, value):
+    def add_topic_doc(self, topic, doc, value):
         self.data[topic][doc] = value
 
-    def inc_topic_doc(self,topic, doc, value=1.0):
+    def inc_topic_doc(self, topic, doc, value=1.0):
         if self.data[topic][doc]:
             self.data[topic][doc] = self.data[topic][doc] + value
         else:

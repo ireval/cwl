@@ -8,7 +8,7 @@ class Ranking(object):
         """
         The ranking object encapsulates the data about the items in the ranked list.
         :param topic_id: a string to denote the topic
-        :param gains: a vector of floats to represent the gain assocaited with each item in the list
+        :param gains: a vector of floats to represent the gain associated with each item in the list
         :param costs: a vector of floats to represent the cost of each item in the list
         :param max_gain: float that is greater than zero
         :param max_cost: float that is greater than zero (and greater to or equal to min_cost)
@@ -102,8 +102,8 @@ class Ranking(object):
 class RankingMaker(object):
     def __init__(self, topic_id, gain_handler, cost_dict=None, max_gain=1.0, max_cost=1.0, min_cost=1.0):
         self.topic_id = topic_id
-        self.qgains = gain_handler
-        self.qcosts = cost_dict
+        self.gain_handler = gain_handler
+        self.cost_lookup = cost_dict
         self.total_qrel_gain = 0.0
         self.total_qrel_rels = 0.0
         self._gains = []
@@ -115,7 +115,7 @@ class RankingMaker(object):
         self.show_report = False
 
     def add(self, doc_id, element_type):
-        gain = self.qgains.get_value_if_exists(self.topic_id, doc_id)
+        gain = self.gain_handler.get_value_if_exists(self.topic_id, doc_id)
         # if the item is not judged, then insert a NaN value for the gain
         # the Ranking object will resolve the NaN value as a min or max gain
         if gain is None:
@@ -127,18 +127,18 @@ class RankingMaker(object):
         self._costs.append(cost)
 
     def get_cost(self, doc_id, element_type):
-        if self.qcosts is None:
+        if self.cost_lookup is None:
             return np.nan
         else:
-            if element_type in self.qcosts:
-                return self.qcosts[element_type]
+            if element_type in self.cost_lookup:
+                return self.cost_lookup[element_type]
             else:
                 return np.nan
 
     def get_ranking(self):
         ranking = Ranking(self.topic_id, self._gains, self._costs, self.max_gain, self.max_cost, self.min_cost)
-        ranking.total_qrel_rels = self.qgains.get_total_rels(self.topic_id)
-        ranking.total_qrel_gain = self.qgains.get_total_gains(self.topic_id)
+        ranking.total_qrel_rels = self.gain_handler.get_total_rels(self.topic_id)
+        ranking.total_qrel_gain = self.gain_handler.get_total_gains(self.topic_id)
         return ranking
 
     def report(self):

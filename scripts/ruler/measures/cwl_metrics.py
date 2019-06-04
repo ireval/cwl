@@ -101,27 +101,26 @@ class CWLMetric(object):
             ))
         else:
             print("{0}\t{1}\t{2:.4f}\t{3:.4f}\t{4:.4f}\t{5:.4f}\t{6:.4f}".format(
-            self.ranking.topic_id, self.name(), self.expected_utility, self.expected_total_utility,
-            self.expected_cost, self.expected_total_cost, self.expected_items,
+                self.ranking.topic_id, self.name(), self.expected_utility, self.expected_total_utility,
+                self.expected_cost, self.expected_total_cost, self.expected_items,
             ))
 
     def csv(self):
-        #return ("{0:.3f}".format(self.expected_utility))
         return ("{0},{1:.3f},{2:.3f},{3:.3f},{4:.3f},{5:.3f}".format(
             self.name(), self.expected_utility, self.expected_total_utility, self.expected_cost,
             self.expected_total_cost, self.expected_items))
 
 
-    def scores(self):
+    def get_scores(self):
         """
-        :return: list with values the metric
+        :return: list with values of each measurement for the previously measured ranking
         """
         scores = [
          self.expected_utility,
          self.expected_total_utility,
          self.expected_cost,
          self.expected_total_cost,
-         self.expected_items ]
+         self.expected_items]
         return scores
 
     def _pad_vector(self, vec1, n, val):
