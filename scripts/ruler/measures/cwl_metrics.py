@@ -21,7 +21,7 @@ class CWLMetric(object):
         self.residual_expected_total_cost = None
         self.residual_expected_items = None
         self.residuals = False
-        self.metric_name = "Def"
+        self.metric_name = "Undefined"
         self.ranking = None
         self.bibtex = ""
 
@@ -29,10 +29,26 @@ class CWLMetric(object):
         return self.metric_name
 
     def c_vector(self, ranking, worse_case=True):
+        """
+        Create a vector of C probabilities (i.e. probability of continuing from position i to position i+1)
+        Note: when defining a metric is best/easiest to re-implement this function.
+        :param ranking: CWL Ranking object
+        :param worse_case: Boolean, to denote whether to estimate based on assuming the
+            worse case i.e. unjudged are considered to be zero gain, and max cost or
+            best case i.e. worse_case=False, and unjudged are considered to be max gain, and min cost
+            Note that the Ranking object handles what is returned in the gain and cost vectors.
+        :return: returns the C vector probabilities
+        """
         cvec = np.ones(len(ranking.get_gain_vector(worse_case)))
         return cvec
 
     def l_vector(self, ranking, worse_case=True):
+        """
+        Create a vector of L probabilities (i.e. the Likelihoods of stopping at position i given the C vector)
+        :param ranking: CWL Ranking object
+        :param worse_case: Boolean, to denote whether to estimate based on assuming the
+        :return: returns the L vector probabilities
+        """
         cvec = self.c_vector(ranking, worse_case)
         logging.debug("{0} {1} {2} {3}".format(ranking.topic_id, self.name(), "cvec", cvec[0:11]))
         cshift = np.append(np.array([1.0]), cvec[0:-1])
@@ -42,6 +58,13 @@ class CWLMetric(object):
         return lvec
 
     def w_vector(self, ranking, worse_case=True):
+        """
+        Create a vector of E probabilities (i.e. probability of examining item i)
+        Note: when defining a metric is best/easiest to re-implement this function.
+        :param ranking: CWL Ranking object
+        :param worse_case: Boolean, to denote whether to estimate based on assuming the
+        :return: returns the W vector probabilities
+        """
         cvec = self.c_vector(ranking, worse_case)
         cvec = cvec[0:-1]
         cvec_prod = np.cumprod(cvec)
@@ -53,6 +76,12 @@ class CWLMetric(object):
         return wvec
 
     def measure(self, ranking):
+        """
+        Given the ranking, measure estimates the various measurements given the CWL framework
+        if residuals are required, these are also computed.
+        :param ranking: CWL Ranking object
+        :return: the expected utility per item
+        """
         self.ranking = ranking
         # score based on worse case - lower bounds
         (eu, etu, ec, etc, ei) = self._do_score(ranking, True)
@@ -78,6 +107,12 @@ class CWLMetric(object):
         return self.expected_utility
 
     def _do_score(self, ranking, worse_case=True):
+        """
+        An internal function that handles the scoring of a ranking given the CWL machinery.
+        :param ranking: CWL Ranking object
+        :return: the expected utility per item
+        :return: returns the expected utility per item, etc..
+        """
         wvec = self.w_vector(ranking, worse_case)
         lvec = self.l_vector(ranking, worse_case)
         gain_vec = ranking.get_gain_vector(worse_case)
@@ -110,7 +145,6 @@ class CWLMetric(object):
             self.name(), self.expected_utility, self.expected_total_utility, self.expected_cost,
             self.expected_total_cost, self.expected_items))
 
-
     def get_scores(self):
         """
         :return: list with values of each measurement for the previously measured ranking
@@ -135,12 +169,4 @@ class CWLMetric(object):
             vec1 = np.pad(vec1, (0, n-len(vec1)), 'constant', constant_values=val)
         return vec1
 
-'''
-http://dl.acm.org/citation.cfm?id=2838938
-@inproceedings{moffat2015inst,
-    title={INST: An Adaptive Metric for Information Retrieval Evaluation},
-    author={Moffat, Alistair and Bailey, Peter and Scholer, Falk and Thomas, Paul},
-    booktitle={Proceedings of the 20th Australasian Document Computing Symposium (ADCS'15)$\}$},
-    year={2015},
-    organization={ACM--Association for Computing Machinery$\}$}
-'''
+

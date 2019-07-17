@@ -85,19 +85,18 @@ class Ranking(object):
         :param val: the value to be inserted if padding is required
         :return: the padded vector
         """
-
         if len(vec1) < n:
             vec1 = np.pad(vec1, (0, n-len(vec1)), 'constant', constant_values=val)
         else:
             vec1 = vec1[0:n]
         return vec1
 
-
     def report(self):
         if self.show_report:
             print("Topic: {0}".format(self.topic_id))
             print(self.topic_id, self.gains[:10])
             print(self.topic_id, self.costs[:10])
+
 
 class RankingMaker(object):
     def __init__(self, topic_id, gain_handler, cost_dict=None, max_gain=1.0, max_cost=1.0, min_cost=1.0):
