@@ -3,23 +3,17 @@ import math
 from ruler.measures.cwl_metrics import CWLMetric
 
 
-'''
-U-Measure
+"""
+U-Measure by Saka and Dou (2013)
 
-@inproceedings{Sakai:2013:SRR:2484028.2484031,
- author = {Sakai, Tetsuya and Dou, Zhicheng},
- title = {Summaries, Ranked Retrieval and Sessions: A Unified Framework for Information Access Evaluation},
- booktitle = {Proceedings of the 36th International ACM SIGIR Conference on Research and Development in Information Retrieval},
- series = {SIGIR '13},
- year = {2013},
- location = {Dublin, Ireland},
- pages = {473--482},
- numpages = {10},
- url = {http://doi.acm.org/10.1145/2484028.2484031}
-} 
+The metric assumes that as searchers read more and more text they are less likely to continue.
 
-'''
+L expresses the half-life associated with reading text. A higher L means the searcher is more likely to continue.
 
+The cost used should be expressed in characters - but as this is porportional to time - time could be used as well.
+Note that if costs are in terms of characters - then the EC and ETC will then be in units based on characters (obviously)
+
+"""
 
 class UMeasureCWLMetric(CWLMetric):
     def __init__(self, L=1000):

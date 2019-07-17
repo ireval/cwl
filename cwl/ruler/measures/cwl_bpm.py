@@ -1,8 +1,8 @@
 import numpy as np
 from ruler.measures.cwl_metrics import CWLMetric
 
-'''
-Bejewelled Player Model (BPM)
+"""
+Bejewelled Player Model (BPM) by Zhang et al 2017
 
 Gains are assumed to be scaled to be between: 0.0 - 1.0
 thus rel_max is assumed to be 1.0. 
@@ -37,20 +37,7 @@ The change in cost is: K <- K + hc * (gain[i] - gain_med)
 
 hb and hc are therefore scaling parameters.
 
-
-@inproceedings{Zhang:2017:EWS:3077136.3080841,
- author = {Zhang, Fan and Liu, Yiqun and Li, Xin and Zhang, Min and Xu, Yinghui and Ma, Shaoping},
- title = {Evaluating Web Search with a Bejeweled Player Model},
- booktitle = {Proceedings of the 40th International ACM SIGIR Conference on Research and Development in Information Retrieval},
- series = {SIGIR '17},
- year = {2017},
- location = {Shinjuku, Tokyo, Japan},
- pages = {425--434},
- url = {http://doi.acm.org/10.1145/3077136.3080841},
-} 
-
-'''
-
+"""
 
 class BPMCWLMetric(CWLMetric):
 

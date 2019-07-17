@@ -2,22 +2,29 @@ import numpy as np
 import math
 from ruler.measures.cwl_metrics import CWLMetric
 
-'''
-Information Foraging Based Measure
+"""
+Information Foraging Based Measure by Azzopardi et al (2018)
 
+T is the target gain (i.e. how much is desired)
+A is the average rate of gain that expected
+b1/b2 are intercept parameters
+R1/R2 are 'rationality' parameters, as R1/R2 are increased to infinity then the searcher becomes increasingly rational, 
+and will stop if T is met, or A is not met. but as R1/R2 are decreased to zero, the the searcher will become ambivalent
+towards T or A respectively, and fall back to the default b1/b2 intercepts. i.e. T or A will not influence the decision
+ to continue.
+ 
+ As a result, if R1/R2 are set to zero, then the metric becomes akin to RBP.
+ If R1 is set to inf, then once T gain is acquired, the searcher will stop - which is akin or RR (where T would equal 1)
+ If R1/R2 are set inbetween, then it suggests that as the user approaches T, they become more likely to stop, as they 
+ are getting closer to their goal, and once they reach their goal, they are still likely to continue (but to a lesser 
+ and lesser degree).  Similiarly, if the user is experiencing a rate of gain higher than A, then they are much more likely to continue, 
+ but as the rate of gain decreases and gets further from A, then user is less likely to continue.
 
-@inproceedings{Azzopardi:2018:MUS:3209978.3210027,
- author = {Azzopardi, Leif and Thomas, Paul and Craswell, Nick},
- title = {Measuring the Utility of Search Engine Result Pages: An Information Foraging Based Measure},
- booktitle = {The 41st International ACM SIGIR Conference on Research \&\#38; Development in Information Retrieval},
- series = {SIGIR '18},
- year = {2018},
- location = {Ann Arbor, MI, USA},
- pages = {605--614},
- numpages = {10},
- } 
+IFTGoalCWLMetric implements the Goal only variant
+IFTRateCWLMetric implements the Rate only variant
+IFTGoalRateCWLMetric implements the Goal and Rate variant - which was shown to be the most accurate in Azzopardi et al.
 
-'''
+"""
 
 class IFTGoalCWLMetric(CWLMetric):
     def __init__(self, T, b1, R1):

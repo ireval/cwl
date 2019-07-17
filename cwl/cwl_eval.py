@@ -1,3 +1,17 @@
+#!/usr/bin/env python.
+"""
+cwl_eval tool for information retrieval evaluation of TREC formated results
+"""
+
+__author__ = 'leifos'
+__credits__ = ['InProceedings{Azzopardi:2019:cwl,'
+               'author = {Azzopardi, Leif and Thomas, Paul and Moffat, Alistair}, '
+               'title = {cwl_eval: An evaluation tool for information retrieval},'
+               'booktitle = {Proceedings of the International ACM SIGIR Conference},'
+               'year = {2019}}']
+__license__ = 'MIT'
+__version__ = '1.0.0'
+
 import os
 import argparse
 import logging
@@ -5,8 +19,14 @@ from seeker.trec_qrel_handler import TrecQrelHandler
 from ruler.cwl_ruler import CWLRuler
 from ruler.ranking import RankingMaker, Ranking
 
-def read_in_cost_file(cost_file):
 
+def read_in_cost_file(cost_file):
+    """
+    Reads in the cost file and stores in a dictionary for looking up the costs.
+    The element_type is to be denoted in the TREC Results File using the previously unused field (2nd Column).
+    :param cost_file: expects a space/tab seperated file with element_type (string) and cost(float)
+    :return: returns a dictionary of element_type/costs
+    """
     costs = dict()
     with open(cost_file, "r") as cf:
         while cf:
@@ -16,7 +36,6 @@ def read_in_cost_file(cost_file):
             (element_type, cost) = line.split()
             element_type = element_type.strip()
             costs[element_type] = float(cost)
-
     return costs
 
 
@@ -44,7 +63,7 @@ def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=No
 
     if colnames:
         if residuals:
-            print("Topic\tMetric\tEU\tETU\tEC\tETC\tED\tResidualEU\tResidualETU\tResidualEC\tResidualETC\tResidualED")
+            print("Topic\tMetric\tEU\tETU\tEC\tETC\tED\tResEU\tResETU\tResEC\tResETC\tResED")
         else:
             print("Topic\tMetric\tEU\tETU\tEC\tETC\tED")
 

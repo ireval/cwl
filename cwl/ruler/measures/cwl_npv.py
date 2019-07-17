@@ -2,10 +2,13 @@ import numpy as np
 from ruler.measures.cwl_metrics import CWLMetric
 
 """
-The calculates the net present value of a ranking 
-The rate is how much the user discounts the future interaction
+An economic metric derived directly from computing the Net Present Value of a given list.
+r is the rate by how much the user discounts the future interaction
 
-Note that NPV is equivalent to RBP where theta = 1/(1+rate)
+Note that NPV is equivalent to RBP where theta = 1/(1+rate).
+
+This means that patience (theta) can be expressed 
+as a how much searchers discount the future value for an alternative perspective.
 
 """
 

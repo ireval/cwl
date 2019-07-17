@@ -2,6 +2,12 @@ import numpy as np
 import math
 from ruler.measures.cwl_metrics import CWLMetric
 
+"""
+INSQ by Moffat et al (is a variant on INST)
+
+T denotes the desired amount of gain.
+"""
+
 
 class INSQCWLMetric(CWLMetric):
 
@@ -9,7 +15,18 @@ class INSQCWLMetric(CWLMetric):
         super().__init__()
         self.metric_name = "INSQ-T={0}    ".format(T)
         self.T = T
-        self.bibtex = ""
+        self.bibtex = """
+        @inproceedings{Moffat:2012:MMI:2407085.2407092,
+        author = {Moffat, Alistair and Scholer, Falk and Thomas, Paul},
+        title = {Models and Metrics: IR Evaluation As a User Process},
+        booktitle = {Proceedings of the Seventeenth Australasian Document Computing Symposium},
+        series = {ADCS '12},
+        year = {2012},
+        location = {Dunedin, New Zealand},
+        pages = {47--54},
+        url = {http://doi.acm.org/10.1145/2407085.2407092},
+        } 
+        """
 
     def name(self):
         return "INSQ-T={0}".format(self.T)

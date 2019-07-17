@@ -3,24 +3,23 @@ import math
 from ruler.measures.cwl_metrics import CWLMetric
 
 
-'''
-Time Biased Gain
+"""
+Time Biased Gain by Smucker and Clarke
 
 H is the halflife which stipulates how quickly the gain decays over time
 
-@inproceedings{Smucker:2012:TCE:2348283.2348300,
- author = {Smucker, Mark D. and Clarke, Charles L.A.},
- title = {Time-based Calibration of Effectiveness Measures},
- booktitle = {Proceedings of the 35th International ACM SIGIR Conference on Research and Development in Information Retrieval},
- series = {SIGIR '12},
- year = {2012},
- location = {Portland, Oregon, USA},
- pages = {95--104},
- numpages = {10},
- url = {http://doi.acm.org/10.1145/2348283.2348300},
-} 
-'''
+TBG is equivalent to RBP if the cost of items is equal.
 
+Note in the formulation below the weight is normalized so that a probability vector is formed for W (i.e. it sums to one).
+I.e. the weights are re-scaled.
+
+Also note that the costs vectors should pre-compute apriori the cost of each element, 
+and if no gain is assigned to duplicate/similar items, then qrel file used should be pre-processed to zero out duplicate 
+items see subsequently.
+
+TODO(): Consider implementing duplicate sensitive qrel handler that would be duplicate aware.
+
+"""
 
 class TBGCWLMetric(CWLMetric):
     def __init__(self, halflife=224):
@@ -31,7 +30,8 @@ class TBGCWLMetric(CWLMetric):
         @inproceedings{Smucker:2012:TCE:2348283.2348300,
         author = {Smucker, Mark D. and Clarke, Charles L.A.},
         title = {Time-based Calibration of Effectiveness Measures},
-        booktitle = {Proceedings of the 35th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+        booktitle = {Proceedings of the 35th International ACM SIGIR Conference
+         on Research and Development in Information Retrieval},
         series = {SIGIR '12},
         year = {2012},
         location = {Portland, Oregon, USA},

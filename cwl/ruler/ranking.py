@@ -7,6 +7,8 @@ class Ranking(object):
     def __init__(self, topic_id, gains, costs, max_gain=1.0, max_cost=1.0, min_cost=1.0):
         """
         The ranking object encapsulates the data about the items in the ranked list.
+        The gains and costs vectors should only be accessed through the two getter methods
+        as these will construct the list of gains and costs upto MAX_N and handle any unjudged items
         :param topic_id: a string to denote the topic
         :param gains: a vector of floats to represent the gain associated with each item in the list
         :param costs: a vector of floats to represent the cost of each item in the list
@@ -99,7 +101,20 @@ class Ranking(object):
 
 
 class RankingMaker(object):
+    """
+    This helper class builds Rankings
+    """
     def __init__(self, topic_id, gain_handler, cost_dict=None, max_gain=1.0, max_cost=1.0, min_cost=1.0):
+        """
+        Iteratively builds up the ranked list of items (via the add function) then returns the final ranking
+        by calling get_ranking
+        :param topic_id: (string) represents the topic id - should match the topic id in the results file
+        :param gain_handler: seeker.trec_qrel_handler.TrecQrelHandler
+        :param cost_dict: a dictionary containing the element_type (key) and cost (float, value).
+        :param max_gain: if an item is unjudged, when worse_case=False, then set gain to max_gain
+        :param max_cost: if an item is unjudged, when worse_case=True, then set cost to max_cost
+        :param min_cost: if an item is unjudged, when worse_case=False, then set the cost to min_cost
+        """
         self.topic_id = topic_id
         self.gain_handler = gain_handler
         self.cost_lookup = cost_dict
@@ -122,10 +137,17 @@ class RankingMaker(object):
         else:
             self._gains.append(gain)
 
-        cost = self.get_cost(doc_id, element_type)
+        cost = self._get_cost(doc_id, element_type)
         self._costs.append(cost)
 
-    def get_cost(self, doc_id, element_type):
+    def _get_cost(self, doc_id, element_type):
+        """
+        For a given document and element type returns the cost given the cost dictionary (cost_lookup)
+        if no cost lookup exists or if the element is not in the dictionary, a nan value is assigned.
+        :param doc_id: string
+        :param element_type: string
+        :return: return a float or nan value
+        """
         if self.cost_lookup is None:
             return np.nan
         else:
@@ -135,6 +157,10 @@ class RankingMaker(object):
                 return np.nan
 
     def get_ranking(self):
+        """
+        Creates and returns a Ranking given the gains and costs added to the ranked lists.
+        :return: ruler.ranking.Ranking
+        """
         ranking = Ranking(self.topic_id, self._gains, self._costs, self.max_gain, self.max_cost, self.min_cost)
         ranking.total_qrel_rels = self.gain_handler.get_total_rels(self.topic_id)
         ranking.total_qrel_gain = self.gain_handler.get_total_gains(self.topic_id)
