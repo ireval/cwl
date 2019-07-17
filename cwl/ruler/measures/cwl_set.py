@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from ruler.measures.cwl_metrics import CWLMetric
+from cwl.ruler.measures.cwl_metrics import CWLMetric
 
 """
 Search Economic Metric based on Azzopardi (2014)'s economic model of search.

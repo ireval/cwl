@@ -1,6 +1,6 @@
-from seeker.common_helpers import file_exists
-from seeker.common_helpers import AutoVivification
-from seeker.topic_document_file_handler import TopicDocumentFileHandler
+from cwl.seeker.common_helpers import file_exists
+from cwl.seeker.common_helpers import AutoVivification
+from cwl.seeker.topic_document_file_handler import TopicDocumentFileHandler
 
 
 class TrecQrelHandler(TopicDocumentFileHandler):
@@ -18,8 +18,7 @@ class TrecQrelHandler(TopicDocumentFileHandler):
         topic = parts[0]
         doc = parts[2].strip()
         judgement = parts[3].strip()
-        if topic and doc:
-            self.data[topic][doc] = float(judgement)
+        self.put_value(topic, doc, judgement)
 
     def _get_out_line(self, topic, doc):
         # outputs the topic document and value as the TREC QREL Format with iteration default to zero

@@ -45,6 +45,51 @@ def check_file_exists(filename):
         quit(1)
 
 
+
+def parse_args():
+
+    arg_parser = argparse.ArgumentParser(description="CWL Evaluation Metrics")
+    arg_parser.add_argument("gain_file", help="A TREC Formatted Qrel File with relevance scores used as gains. "
+                                              "Gain values should be between zero and one. "
+                                              "Four column tab/space sep file with fields: topic_id unused doc_id gain")
+    arg_parser.add_argument("result_file",
+                            help="TREC formatted results file. Six column tab/space sep file with fields:"
+                                 " topic_id element_type doc_id rank score run_id.")
+    arg_parser.add_argument("-c", "--cost_file",
+                            help="Costs associated with each element type specified in result file.",
+                            required=False, default=None)
+    arg_parser.add_argument("-m", "--metrics_file", help="The list of metrics that are to be reported. "
+                                                         "If not specified, a set of default metrics will be reported."
+                                                         " Tab/space sep file with fields: metric_name params",
+                            required=False, default=None)
+    arg_parser.add_argument("-b", "--bib_file", help="If specified, then the BibTeX for the measures used"
+                                                     " will be saved to the filename given.", required=False,
+                            default=None)
+    arg_parser.add_argument("-n", "--colnames", help="Includes headings in the output.",
+                            required=False, action="store_true")
+    arg_parser.add_argument("-r", "--residuals", help="Include residual calculations.",
+                            required=False, action="store_true")
+    arg_parser.add_argument("--max_gain", help="Maximum gain associated with an item. Used for computing residuals. "
+                                               "(default=1.0)", required=False, default=1.0)
+    arg_parser.add_argument("--max_cost", help="Maximum cost associated with an item. Used for computing residuals. "
+                                               "(default=1.0)", required=False, default=1.0)
+    arg_parser.add_argument("--min_cost", help="Maximum cost associated with an item. Used for computing residuals. "
+                                               "(default=1.0)", required=False, default=1.0)
+
+    args = arg_parser.parse_args()
+    if args.colnames:
+        args.colnames = True
+    else:
+        args.colnames = False
+
+    if args.residuals:
+        args.residuals = True
+    else:
+        args.residuals = False
+
+    return args
+
+
 def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=None, colnames=False,
          residuals=False, max_gain=1.0, max_cost=1.0, min_cost=1.0):
 
@@ -105,40 +150,7 @@ def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=No
 
 
 if __name__ == "__main__":
-
-    arg_parser = argparse.ArgumentParser(description="CWL Evaluation Metrics")
-    arg_parser.add_argument("gain_file", help="A TREC Formatted Qrel File with relevance scores used as gains. "
-                                              "Gain values should be between zero and one. "
-                                              "Four column tab/space sep file with fields: topic_id unused doc_id gain")
-    arg_parser.add_argument("result_file", help="TREC formatted results file. Six column tab/space sep file with fields:"
-                                                " topic_id element_type doc_id rank score run_id.")
-    arg_parser.add_argument("-c", "--cost_file", help="Costs associated with each element type specified in result file.",
-                            required=False, default=None)
-    arg_parser.add_argument("-m", "--metrics_file", help="The list of metrics that are to be reported. "
-                                                         "If not specified, a set of default metrics will be reported."
-                                                         " Tab/space sep file with fields: metric_name params",
-                            required=False, default=None)
-    arg_parser.add_argument("-b", "--bib_file", help="If specified, then the BibTeX for the measures used"
-                                                     " will be saved to the filename given.", required=False, default=None)
-    arg_parser.add_argument("-n", "--colnames", help="Includes headings in the output.",
-                            required=False, action="store_true")
-    arg_parser.add_argument("-r", "--residuals", help="Include residual calculations.",
-                            required=False, action="store_true")
-    arg_parser.add_argument("--max_gain", help="Maximum gain associated with an item. Used for computing residuals. "
-                                               "(default=1.0)", required=False, default=1.0)
-    arg_parser.add_argument("--max_cost", help="Maximum cost associated with an item. Used for computing residuals. "
-                                               "(default=1.0)", required=False, default=1.0)
-    arg_parser.add_argument("--min_cost", help="Maximum cost associated with an item. Used for computing residuals. "
-                                               "(default=1.0)", required=False,default=1.0)
-
-    args = arg_parser.parse_args()
-    colnames = False
-    if args.colnames:
-        colnames = True
-
-    residuals = False
-    if args.residuals:
-        residuals = True
+    args = parse_args()
 
     check_file_exists(args.result_file)
     check_file_exists(args.gain_file)
@@ -146,4 +158,4 @@ if __name__ == "__main__":
     check_file_exists(args.metrics_file)
 
     main(args.result_file, args.gain_file, args.cost_file, args.metrics_file, args.bib_file,
-         colnames, residuals, args.max_gain, args.max_cost, args.min_cost)
+         args.colnames, args.residuals, args.max_gain, args.max_cost, args.min_cost)

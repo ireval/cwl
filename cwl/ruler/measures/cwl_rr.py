@@ -1,5 +1,5 @@
 import numpy as np
-from ruler.measures.cwl_metrics import CWLMetric
+from cwl.ruler.measures.cwl_metrics import CWLMetric
 
 """
 Reciprocal Rank (RR) - From TREC-5 in 1996 by Kantor and Voorhees

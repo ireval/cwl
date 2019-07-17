@@ -1,5 +1,5 @@
 import numpy as np
-from ruler.measures.cwl_metrics import CWLMetric
+from cwl.ruler.measures.cwl_metrics import CWLMetric
 
 """
 An economic metric derived directly from computing the Net Present Value of a given list.

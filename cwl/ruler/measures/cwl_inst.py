@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from ruler.measures.cwl_metrics import CWLMetric
+from cwl.ruler.measures.cwl_metrics import CWLMetric
 
 """
 INST is from Moffat et al., Australasian Document Computing Symposium 2015

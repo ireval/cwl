@@ -1,6 +1,6 @@
-from ifind.seeker.common_helpers import file_exists
-from ifind.seeker.common_helpers import AutoVivification
-from ifind.seeker.topic_document_file_handler import TopicDocumentFileHandler
+from cwl.seeker.common_helpers import file_exists
+from cwl.seeker.common_helpers import AutoVivification
+from cwl.seeker.topic_document_file_handler import TopicDocumentFileHandler
 
 
 def process_trec_line(line):
@@ -26,8 +26,7 @@ class TrecResultHandler(TopicDocumentFileHandler):
 
     def _put_in_line(self, line):
         topic, docid, rank, score = process_trec_line(line)
-        if topic and docid:
-            self.data[topic][docid] = [docid, float(score)]
+        self.put_value(topic, docid, score)
 
     def _get_out_line(self, topic, doc, rank, score):
         # outputs in TREC Result format

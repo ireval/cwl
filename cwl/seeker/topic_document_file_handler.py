@@ -1,6 +1,6 @@
 import numpy as np
-from seeker.common_helpers import file_exists
-from seeker.common_helpers import AutoVivification
+from cwl.seeker.common_helpers import file_exists
+from cwl.seeker.common_helpers import AutoVivification
 
 
 class TopicDocumentFileHandler(object):
@@ -17,8 +17,7 @@ class TopicDocumentFileHandler(object):
         parts = parts[2].partition(' ')
         doc = parts[0]
         value = parts[2].strip()
-        if topic and doc:
-            self.qrels[topic][doc] = float(value)
+        self.put_value(topic, doc, value)
 
     def _get_out_line(self, topic, doc):
         # outputs the topic document and value in a specific way.
@@ -47,6 +46,10 @@ class TopicDocumentFileHandler(object):
                 outfile.write(out_line)
 
         outfile.close()
+
+    def put_value(self, topic, doc, value):
+        if topic and doc:
+            self.data[topic][doc] = float(value)
 
     def get_value(self, topic, doc):
         if topic not in self.data:

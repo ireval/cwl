@@ -1,11 +1,11 @@
 import unittest
 import sys
 import numpy as np
-sys.path.insert(0,'../')
+sys.path.insert(0,'./')
 
-from ruler.ranking import Ranking
-from ruler.ranking import RankingMaker
-from seeker.trec_qrel_handler import TrecQrelHandler
+from cwl.ruler.ranking import Ranking
+from cwl.ruler.ranking import RankingMaker
+from cwl.seeker.trec_qrel_handler import TrecQrelHandler
 
 class TestRanking(unittest.TestCase):
 
@@ -129,8 +129,18 @@ class TestRanking(unittest.TestCase):
 class TestRankingMaker(unittest.TestCase):
 
     def setUp(self):
-        gh = TrecQrelHandler("test_qrel_file")
-        # print(gh)
+        gh = TrecQrelHandler("qrel_file")
+        gh.put_value("T1", "D1", 1.0)
+        gh.put_value("T1", "D2", 0.0)
+        gh.put_value("T1", "D3", 1.0)
+        gh.put_value("T1", "D4", 0.0)
+        gh.put_value("T1", "D5", 1.0)
+        gh.put_value("T1", "D6", 0.0)
+        gh.put_value("T1", "D7", 1.0)
+        gh.put_value("T1", "D8", 0.0)
+        gh.put_value("T1", "D9", 0.0)
+        gh.put_value("T1", "D10", 1.0)
+
         self.rm = RankingMaker(topic_id="T1", gain_handler=gh, cost_dict=None)
         docs = ["D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10"]
         for d in docs:
@@ -138,9 +148,10 @@ class TestRankingMaker(unittest.TestCase):
 
     def test_ranking(self):
         ranking = self.rm.get_ranking()
+        #print(ranking.)
         min_gains = ranking.get_gain_vector()
         max_gains = ranking.get_gain_vector(worse_case=False)
-        # print(gains[0:20])
+        #print(min_gains[0:20])
         # print(np.cumsum(gains)[0:20])
         # print(gains[0:10])
         self.assertEqual(np.sum(min_gains[0:20]), 5.0)

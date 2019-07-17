@@ -2,19 +2,19 @@ import os
 import inspect
 import importlib
 
-from ruler.measures.cwl_metrics import *
-from ruler.measures.cwl_precision import *
-from ruler.measures.cwl_rbp import *
-from ruler.measures.cwl_rr import *
-from ruler.measures.cwl_ap import *
-from ruler.measures.cwl_dcg import *
-from ruler.measures.cwl_inst import *
-from ruler.measures.cwl_insq import *
-from ruler.measures.cwl_tbg import *
-from ruler.measures.cwl_bpm import *
-from ruler.measures.cwl_umeasure import *
-from ruler.measures.cwl_ift import *
-from ruler.ranking import Ranking
+from cwl.ruler.measures.cwl_metrics import *
+from cwl.ruler.measures.cwl_precision import *
+from cwl.ruler.measures.cwl_rbp import *
+from cwl.ruler.measures.cwl_rr import *
+from cwl.ruler.measures.cwl_ap import *
+from cwl.ruler.measures.cwl_dcg import *
+from cwl.ruler.measures.cwl_inst import *
+from cwl.ruler.measures.cwl_insq import *
+from cwl.ruler.measures.cwl_tbg import *
+from cwl.ruler.measures.cwl_bpm import *
+from cwl.ruler.measures.cwl_umeasure import *
+from cwl.ruler.measures.cwl_ift import *
+from cwl.ruler.ranking import Ranking
 
 class CWLRuler(object):
 

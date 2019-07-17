@@ -1,9 +1,9 @@
 import unittest
 import sys
-sys.path.insert(0,'../')
+#sys.path.insert(0, '../')
 
-from ruler.measures.cwl_precision import PrecisionCWLMetric
-from ruler.cwl_ruler import Ranking
+from cwl.ruler.measures.cwl_precision import PrecisionCWLMetric
+from cwl.ruler.ranking import Ranking
 
 
 class TestPrecision(unittest.TestCase):

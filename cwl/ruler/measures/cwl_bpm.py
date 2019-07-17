@@ -1,5 +1,5 @@
 import numpy as np
-from ruler.measures.cwl_metrics import CWLMetric
+from cwl.ruler.measures.cwl_metrics import CWLMetric
 
 """
 Bejewelled Player Model (BPM) by Zhang et al 2017

@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import distutils
+
+if __name__ == '__main__':
+    # Work out the directory for the cwl scripts (in the site-packages directory)
+    site_packages_dir = distutils.sysconfig.get_python_lib()
+    cwl_dir = os.path.join(site_packages_dir, 'cwl')
+    
+    # If in developer mode, we can work this out from the current directory.
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    scripts_dir = os.path.join(current_dir, 'cwl')
+    
+    # Prepend the paths to the PYTHONPATH for this instance.
+    sys.path.insert(0, cwl_dir)
+    sys.path.insert(0, scripts_dir)
+    
+    # Now we should be able to import CWL without issue
+    from cwl import cwl_eval
+
+    # Parse the arguments, check that the files exist, and run!
+    args = cwl_eval.parse_args()
+
+    cwl_eval.check_file_exists(args.result_file)
+    cwl_eval.check_file_exists(args.gain_file)
+    cwl_eval.check_file_exists(args.cost_file)
+    cwl_eval.check_file_exists(args.metrics_file)
+
+    cwl_eval.main(args.result_file, args.gain_file, args.cost_file, args.metrics_file, args.bib_file,
+                  args.colnames, args.residuals, args.max_gain, args.max_cost, args.min_cost)

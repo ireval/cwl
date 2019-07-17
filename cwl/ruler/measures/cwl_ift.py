@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from ruler.measures.cwl_metrics import CWLMetric
+from cwl.ruler.measures.cwl_metrics import CWLMetric
 
 """
 Information Foraging Based Measure by Azzopardi et al (2018)
