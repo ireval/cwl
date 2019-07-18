@@ -1,7 +1,9 @@
 # C/W/L Evaluation Script
 An evaluation script based on the C/W/L framework
 that is TREC Compatible and provides a replacement
-for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL
+for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL.
+
+If you download CWL Eval directly from GutHub then the usage is as follows:
 
     Usage: cwl_eval.py <gain_file> <result_file> -c <cost_file> -m <metrics_file> -b <bibtex_file>
 
@@ -11,7 +13,7 @@ for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL
 
     Usage: cwl_eval.py -h
 
-- <gain_file>   : A TREC Formatted Qrel File with relevance scores used as gains
+- <gain_file>   : A TREC Formatted Qrel File with relevance scores used as gains (float)
                 Four column tab/space sep file with fields: topic_id unused doc_id gain
 
 - <cost_file>   : Costs associated with element type
@@ -29,8 +31,14 @@ for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL
 - <bibtex_file>: Specify this file if you would like the bibtex associated with the measures specified to be
                output to a file called <bibtex_file>
 
-
 - -n: Add -n flag to output column names (e.g. Topic, Metric, EU, ETU, EC, ETC, ED)
+
+- -r: Add -r flag to also output residuals for each measurement.
+
+However, you can also use `pip install cwl-eval` to install cwl-eval and the libraries, 
+in which case you can directly call `cwl-eval <gain_file> <result_file>` etc.
+
+
 
 **Example without using a cost file.**
 When no costs are specified the cost per item is assumed to be 1.0, and EC and I will be equal.
@@ -44,7 +52,7 @@ When no costs are specified the cost per item is assumed to be 1.0, and EC and I
 
 
 **Output**
-A seven column tab/space seperated file that contains:
+A seven column tab/space separated file that contains:
 
 - Topic ID
 - Metric Name
@@ -159,7 +167,7 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 
     python scripts/cwl_eval.py scripts/tests/test_qrel_file scripts/tests/test_result_file -c scripts/tests/test_cost_file
 
-| Topic| Metric                                             | EU | ETU | EC | ETC | ED |
+| Topic| Metric                                             | EU   | ETU   | EC     | ETC   | ED     |
 |------|---------------------------------------------------|-------|-------|-------|--------|--------|
 | T1   | P@20                                              | 0.150 | 3.000 | 1.650 | 33.000 | 20.000 |
 | T1   | P@10                                              | 0.300 | 3.000 | 2.300 | 23.000 | 10.000 |
@@ -201,7 +209,7 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 if a metrics_file is not specified, CWL Eval will default to a set of metrics
 defined in ``ruler/measures/cwl_ruler.py''
 
-If the metrics_file is specified, CWL Eval will instantite and use the metrics listed.
+If the metrics_file is specified, CWL Eval will instantiate and use the metrics listed.
 An example test_metrics_file is provided, which includes the following:
 
     PrecisionCWLMetric(1)
@@ -233,7 +241,7 @@ An example test_metrics_file is provided, which includes the following:
     IFTGoalRateCWLMetric(2.0,0.9,100, 0.2, 0.9, 100)
 
 To specify which metric you desire, inspect the metrics classes in ``ruler/measures/''
-to see what metrics are avaiable, and how the parameterize them.
+to see what metrics are available, and how the parameterize them.
 
 For example if you wanted Precision Based Measures then you can list them as follows:
 
