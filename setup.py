@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='cwl-eval',
-    version='1.0.5',
+    version='1.0.6',
     
     scripts=['cwl-eval'],
     
@@ -21,17 +21,22 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     
     url='https://github.com/ireval/cwl',
-    
+
     packages=setuptools.find_packages(),
     
     python_requires='>=3',
+
+    install_requires=[
+        'numpy',
+    ],
     
     classifiers=[
         'Intended Audience :: Science/Research',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Scientific/Engineering :: Information Analysis',
+        'License :: OSI Approved :: MIT License',
+        'Development Status :: 3 - Alpha',
+
     ],
-    install_requires=[
-        'numpy',
-    ]
+
 )
