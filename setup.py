@@ -14,7 +14,8 @@ setuptools.setup(
     
     description='An information retrieval evaluation script based on the C/W/L framework '
                 'that is TREC Compatible and provides a replacement for INST_EVAL, RBP_EVAL, '
-                'TBG_EVAL, UMeasure, TREC_EVAL.',
+                'TBG_EVAL, UMeasure and TREC_EVAL scripts. All measurements are reported in '
+                'the same units making all metrics directly comparable.',
     
     long_description=long_description,
     long_description_content_type='text/markdown',
