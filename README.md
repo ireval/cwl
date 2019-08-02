@@ -7,6 +7,7 @@ for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL.
 ## Install
 
 Install either via `pip install cwl-eval` or ``git clone https://github.com/ireval/cwl.git``.
+`cwl-eval` requires Python 3 and Numpy.
 
 
 ## Usage
