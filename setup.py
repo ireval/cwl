@@ -10,7 +10,7 @@ setuptools.setup(
     scripts=['cwl-eval'],
     
     author='Leif Azzopardi, Paul Thomas, Alistair Moffat',
-    author_email='leifos@acm.org, pathom@microsoft.com, ammffat@unimelb.edu.au',
+    author_email='leifos@acm.org, pathom@microsoft.com, ammoffat@unimelb.edu.au',
     
     description='An information retrieval evaluation script based on the C/W/L framework '
                 'that is TREC Compatible and provides a replacement for INST_EVAL, RBP_EVAL, '
