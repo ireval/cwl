@@ -3,6 +3,17 @@ An evaluation script based on the C/W/L framework
 that is TREC Compatible and provides a replacement
 for INST_EVAL, RBP_EVAL, TBG_EVAL, UMeasure, TREC_EVAL.
 
+
+## Install
+
+Install either via `pip install cwl-eval` or ``git clone https://github.com/ireval/cwl.git``.
+
+
+## Usage
+
+Once you have installed the C/W/L Evaluation Framework using `pip install`, you should be able to use the `cwl-eval` as shown below.
+If you have used `git clone` to install the framework, then you will need to run `cwl_eval.py` directly.
+
     Usage: cwl-eval <gain_file> <result_file> -c <cost_file> -m <metrics_file> -b <bibtex_file>
 
     Usage: cwl-eval <gain_file> <result_file> -c <cost_file> -m <metrics_file>
