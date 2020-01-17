@@ -91,7 +91,7 @@ class Ranking(object):
             vec1 = np.pad(vec1, (0, n-len(vec1)), 'constant', constant_values=val)
         else:
             vec1 = vec1[0:n]
-        return vec1
+        return np.array(vec1)
 
     def report(self):
         if self.show_report:
