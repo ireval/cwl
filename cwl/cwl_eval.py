@@ -15,9 +15,9 @@ __version__ = '1.0.0'
 import os
 import argparse
 import logging
-from seeker.trec_qrel_handler import TrecQrelHandler
-from ruler.cwl_ruler import CWLRuler
-from ruler.ranking import RankingMaker, Ranking
+from cwl.seeker.trec_qrel_handler import TrecQrelHandler
+from cwl.ruler.cwl_ruler import CWLRuler
+from cwl.ruler.ranking import RankingMaker, Ranking
 
 
 def read_in_cost_file(cost_file):

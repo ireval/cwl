@@ -2,21 +2,26 @@
 
 import os
 import sys
-import distutils
+from distutils.sysconfig import get_python_lib
 
 if __name__ == '__main__':
     # Work out the directory for the cwl scripts (in the site-packages directory)
-    site_packages_dir = distutils.sysconfig.get_python_lib()
+    site_packages_dir = get_python_lib()
     cwl_dir = os.path.join(site_packages_dir, 'cwl')
+    #print(cwl_dir)
     
     # If in developer mode, we can work this out from the current directory.
     current_dir = os.path.dirname(os.path.realpath(__file__))
     scripts_dir = os.path.join(current_dir, 'cwl')
+    #print(scripts_dir)
     
     # Prepend the paths to the PYTHONPATH for this instance.
     sys.path.insert(0, cwl_dir)
+    #sys.path.insert(0, os.path.join(cwl_dir,'cwl'))
+
     sys.path.insert(0, scripts_dir)
-    
+    #sys.path.insert(0, os.path.join(scripts_dir,'cwl'))
+    #print(os.path.join(scripts_dir,'cwl'))
     # Now we should be able to import CWL without issue
     from cwl import cwl_eval
 
