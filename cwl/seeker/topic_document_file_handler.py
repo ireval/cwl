@@ -65,7 +65,7 @@ class TopicDocumentFileHandler(object):
             return None
 
         if doc in self.data[topic].keys():
-            return int(self.data[topic][doc])
+            return float(self.data[topic][doc])
         else:
             return None
 
