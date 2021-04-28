@@ -73,7 +73,7 @@ def parse_args():
                                                "(default=1.0)", required=False, default=1.0)
     arg_parser.add_argument("--max_cost", help="Maximum cost associated with an item. Used for computing residuals. "
                                                "(default=1.0)", required=False, default=1.0)
-    arg_parser.add_argument("--min_cost", help="Maximum cost associated with an item. Used for computing residuals. "
+    arg_parser.add_argument("--min_cost", help="Minimum cost associated with an item. Used for computing residuals. "
                                                "(default=1.0)", required=False, default=1.0)
 
     args = arg_parser.parse_args()
