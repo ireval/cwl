@@ -1,6 +1,6 @@
 import numpy as np
 
-MAX_N = 1000
+MAX_N = 5000
 
 
 class Ranking(object):
