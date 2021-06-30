@@ -4,8 +4,6 @@ import logging
 
 logging.basicConfig(filename='cwl.log', level=logging.DEBUG)
 
-MAXN = 5000
-
 class CWLMetric(object):
 
     def __init__(self):
