@@ -1,6 +1,6 @@
 import numpy as np
 
-MAX_N = 5000
+MAX_N = 1000
 
 
 class Ranking(object):
@@ -39,11 +39,11 @@ class Ranking(object):
         # pad out the vector to size n
         # convert all NaNs to min (worse case) or max (best case)
         if worse_case:
-            gains = self._pad_trunc_vector(self._gains, MAX_N, self.min_gain)
+            gains = self._pad_trunc_vector(self._gains, self.n, self.min_gain)
             gains[np.isnan(gains)] = self.min_gain
             return gains
         else:
-            gains = self._pad_trunc_vector(self._gains, MAX_N, self.max_gain)
+            gains = self._pad_trunc_vector(self._gains, self.n, self.max_gain)
             gains[np.isnan(gains)] = self.max_gain
             return gains
 
@@ -51,11 +51,11 @@ class Ranking(object):
         # pad out the vector to size n
         # convert all NaNs to max (worse case) or min (best case)
         if worse_case:
-            costs = self._pad_trunc_vector(self._costs, MAX_N, self.max_cost)
+            costs = self._pad_trunc_vector(self._costs, self.n, self.max_cost)
             costs[np.isnan(costs)] = self.max_cost
             return costs
         else:
-            costs = self._pad_trunc_vector(self._costs, MAX_N, self.min_cost)
+            costs = self._pad_trunc_vector(self._costs, self.n, self.min_cost)
             costs[np.isnan(costs)] = self.min_cost
             return costs
 
