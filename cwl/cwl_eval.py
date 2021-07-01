@@ -95,10 +95,6 @@ def parse_args():
 def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=None, colnames=False,
          residuals=False, max_gain=1.0, max_cost=1.0, min_cost=1.0, max_n=1000):
   
-
-    print(type(max_n))
-    print (max_n)
-
     logging.basicConfig(filename='cwl.log', level=logging.DEBUG)
     logging.info("Processing: {} using gain: {} and costs: {}".format(results_file, gain_file, cost_file))
     logging.info("Max Gain: {} Max Cost: {} Min Cost: {} Max N: {}".format(max_gain, max_cost, min_cost, max_n))
