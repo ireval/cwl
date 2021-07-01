@@ -75,6 +75,8 @@ def parse_args():
                                                "(default=1.0)", required=False, default=1.0)
     arg_parser.add_argument("--min_cost", help="Minimum cost associated with an item. Used for computing residuals. "
                                                "(default=1.0)", required=False, default=1.0)
+    arg_parser.add_argument("--max_depth", help="Maximum depth to compute metrics. "
+                                               "(default=1000)", required=False, default=1000, type=int)
 
     args = arg_parser.parse_args()
     if args.colnames:
@@ -91,11 +93,15 @@ def parse_args():
 
 
 def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=None, colnames=False,
-         residuals=False, max_gain=1.0, max_cost=1.0, min_cost=1.0):
+         residuals=False, max_gain=1.0, max_cost=1.0, min_cost=1.0, max_n=1000):
+  
+
+    print(type(max_n))
+    print (max_n)
 
     logging.basicConfig(filename='cwl.log', level=logging.DEBUG)
     logging.info("Processing: {} using gain: {} and costs: {}".format(results_file, gain_file, cost_file))
-    logging.info("Max Gain: {} Max Cost: {} Min Cost: {}".format(max_gain, max_cost, min_cost))
+    logging.info("Max Gain: {} Max Cost: {} Min Cost: {} Max N: {}".format(max_gain, max_cost, min_cost, max_n))
     qrh = TrecQrelHandler(gain_file)
     costs = None
     # read in cost file - if cost file exists
@@ -136,7 +142,7 @@ def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=No
 
                 # reset seen list
                 ranking_maker = RankingMaker(curr_topic_id, qrh, costs,
-                                             max_gain=max_gain, max_cost=max_cost, min_cost=min_cost)
+                                             max_gain=max_gain, max_cost=max_cost, min_cost=min_cost, max_n=max_n)
                 ranking_maker.add(doc_id, element_type)
 
         # Perform the Measurements on the last topic
@@ -158,4 +164,4 @@ if __name__ == "__main__":
     check_file_exists(args.metrics_file)
 
     main(args.result_file, args.gain_file, args.cost_file, args.metrics_file, args.bib_file,
-         args.colnames, args.residuals, args.max_gain, args.max_cost, args.min_cost)
+         args.colnames, args.residuals, args.max_gain, args.max_cost, args.min_cost, args.max_depth)
