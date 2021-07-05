@@ -18,6 +18,10 @@ NRReq11 runs to full depth according to the parameter T (akin to INSQ).
 # Option One (Equation 8)
 class NERReq8CWLMetric(CWLMetric):
 
+    # NERReq8 requires gains to be in range [0, 1]
+    MINGAIN = 0.0
+    MAXGAIN = 1.0
+
     def __init__(self, k):
         super().__init__()
         self.metric_name = "NERR-EQ8@{0}".format(k)
@@ -36,6 +40,7 @@ class NERReq8CWLMetric(CWLMetric):
 
     def c_vector(self, ranking, worse_case=True):
         gains = ranking.get_gain_vector(worse_case)
+        self.validate_gain_range(self.MINGAIN, self.MAXGAIN, gains)
         cvec = np.zeros(len(gains))
         i = 0
         while i < len(gains) and i < self.k - 1: 
@@ -47,6 +52,11 @@ class NERReq8CWLMetric(CWLMetric):
 
 # Option Two (Equation 9)
 class NERReq9CWLMetric(CWLMetric):
+
+    # NERReq9 requires gains to be in range [0, 1]
+    MINGAIN = 0.0
+    MAXGAIN = 1.0
+
 
     def __init__(self, k):
         super().__init__()
@@ -66,6 +76,7 @@ class NERReq9CWLMetric(CWLMetric):
 
     def c_vector(self, ranking, worse_case=True):
         gains = ranking.get_gain_vector(worse_case)
+        self.validate_gain_range(self.MINGAIN, self.MAXGAIN, gains)
         cvec = np.zeros(len(gains))
         i = 0
         while i < len(gains) and i < self.k - 1: 
@@ -78,6 +89,10 @@ class NERReq9CWLMetric(CWLMetric):
 
 # Option Three (Equation 10)
 class NERReq10CWLMetric(CWLMetric):
+
+    # NERReq10 requires gains to be in range [0, 1]
+    MINGAIN = 0.0
+    MAXGAIN = 1.0
 
     def __init__(self, phi = 0.9):
         super().__init__()
@@ -97,6 +112,7 @@ class NERReq10CWLMetric(CWLMetric):
 
     def c_vector(self, ranking, worse_case=True):
         gains = ranking.get_gain_vector(worse_case)
+        self.validate_gain_range(self.MINGAIN, self.MAXGAIN, gains)
         cvec = np.zeros(len(gains))
         i = 0
         while i < len(gains):
@@ -108,6 +124,11 @@ class NERReq10CWLMetric(CWLMetric):
 
 # Option Four (Equation 11)
 class NERReq11CWLMetric(CWLMetric):
+
+    # NERReq11 requires gains to be in range [0, 1]
+    MINGAIN = 0.0
+    MAXGAIN = 1.0
+
 
     def __init__(self, T = 1.0):
         super().__init__()
@@ -127,6 +148,7 @@ class NERReq11CWLMetric(CWLMetric):
  
     def c_vector(self, ranking, worse_case=True):
         gains = ranking.get_gain_vector(worse_case)
+        self.validate_gain_range(self.MINGAIN, self.MAXGAIN, gains)
         cvec = np.zeros(len(gains))
         i = 0
         while i < len(gains):

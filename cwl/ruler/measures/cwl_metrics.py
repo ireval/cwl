@@ -166,4 +166,14 @@ class CWLMetric(object):
             vec1 = np.pad(vec1, (0, n-len(vec1)), 'constant', constant_values=val)
         return vec1
 
+    def validate_gain_range(self, min_allowed_gain, max_allowed_gain, gain_vec):
+        '''
+        Checks that the gain vector does not violate any metric assumptions
+        These assumptions (about the min or max gain) should be provided by
+        the calling metric class.
+        '''
+        for gain in gain_vec:
+            if gain > max_allowed_gain or gain < min_allowed_gain:
+                raise ValueError("Supplied gain values violate metric assumptions: Metric = {}".format(self.name()))
+
 
