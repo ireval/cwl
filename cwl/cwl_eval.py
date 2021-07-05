@@ -70,7 +70,7 @@ def parse_args():
     arg_parser.add_argument("-r", "--residuals", help="Include residual calculations.",
                             required=False, action="store_true")
     arg_parser.add_argument("--max_gain", help="Maximum gain associated with an item. Used for computing residuals. "
-                                               "(default=1.0)", required=False, default=1.0)
+                                               "(default=1.0)", required=False, default=1.0, type=float)
     arg_parser.add_argument("--max_cost", help="Maximum cost associated with an item. Used for computing residuals. "
                                                "(default=1.0)", required=False, default=1.0)
     arg_parser.add_argument("--min_cost", help="Minimum cost associated with an item. Used for computing residuals. "
@@ -99,6 +99,7 @@ def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=No
     logging.info("Processing: {} using gain: {} and costs: {}".format(results_file, gain_file, cost_file))
     logging.info("Max Gain: {} Max Cost: {} Min Cost: {} Max N: {}".format(max_gain, max_cost, min_cost, max_n))
     qrh = TrecQrelHandler(gain_file)
+    qrh.validate_gains(max_gain)
     costs = None
     # read in cost file - if cost file exists
     if cost_file:

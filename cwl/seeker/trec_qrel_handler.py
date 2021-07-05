@@ -24,6 +24,19 @@ class TrecQrelHandler(TopicDocumentFileHandler):
         # outputs the topic document and value as the TREC QREL Format with iteration default to zero
         return "%s 0 %s %d\n" % (topic, doc, self.data[topic][doc])
 
+    def validate_gains(self, max_gain):
+        '''
+        Iterates all gains and checks to ensure they are below the value of
+        max_gain. 
+        '''
+        all_gains = self.get_topic_doc_dict()
+        for topic_id in all_gains:
+            for gain in all_gains[topic_id].values():
+              if gain > max_gain:
+                raise ValueError("Detected a gain value greater than the maximum. Please check your gains file.")
+              if gain < 0.0:
+                raise ValueError("Detected a gain value less than zero. Please check your gains file.")
+ 
     def get_total_gains(self, topic):
 
         doc_list = self.get_doc_list(topic)
