@@ -45,12 +45,12 @@ def check_file_exists(filename):
         quit(1)
 
 
-
 def parse_args():
 
     arg_parser = argparse.ArgumentParser(description="CWL Evaluation Metrics")
-    arg_parser.add_argument("gain_file", help="A TREC Formatted Qrel File with relevance scores used as gains. "
-                                              "Gain values should be between zero and one. "
+    arg_parser.add_argument("gain_file", help="A TREC Formatted Qrel File with "
+                                              "relevance column assumed to be gain values."
+                                              "Gain values should be between zero and one (unless otherwise specified)."
                                               "Four column tab/space sep file with fields: topic_id unused doc_id gain")
     arg_parser.add_argument("result_file",
                             help="TREC formatted results file. Six column tab/space sep file with fields:"
@@ -69,37 +69,43 @@ def parse_args():
                             required=False, action="store_true")
     arg_parser.add_argument("-r", "--residuals", help="Include residual calculations.",
                             required=False, action="store_true")
-    arg_parser.add_argument("--max_gain", help="Maximum gain associated with an item. Used for computing residuals. "
+    arg_parser.add_argument("--max_gain", help="Maximum gain associated with an item used for computing residuals"
+                                               " and checking gain input file. "
                                                "(default=1.0)", required=False, default=1.0, type=float)
+    arg_parser.add_argument("--min_gain", help="Maximum gain associated with an item used"
+                                               " for checking gain input file. "
+                                               "(default=0.0)", required=False, default=0.0, type=float)
     arg_parser.add_argument("--max_cost", help="Maximum cost associated with an item. Used for computing residuals. "
                                                "(default=1.0)", required=False, default=1.0)
     arg_parser.add_argument("--min_cost", help="Minimum cost associated with an item. Used for computing residuals. "
                                                "(default=1.0)", required=False, default=1.0)
     arg_parser.add_argument("--max_depth", help="Maximum depth to compute metrics. "
-                                               "(default=1000)", required=False, default=1000, type=int)
+                                                "(default=1000)", required=False, default=1000, type=int)
 
-    args = arg_parser.parse_args()
-    if args.colnames:
-        args.colnames = True
+    p_args = arg_parser.parse_args()
+    if p_args.colnames:
+        p_args.colnames = True
     else:
-        args.colnames = False
+        p_args.colnames = False
 
-    if args.residuals:
-        args.residuals = True
+    if p_args.residuals:
+        p_args.residuals = True
     else:
-        args.residuals = False
+        p_args.residuals = False
 
-    return args
+    return p_args
 
 
-def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=None, colnames=False,
-         residuals=False, max_gain=1.0, max_cost=1.0, min_cost=1.0, max_n=1000):
+def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=None, col_names=False,
+         residuals=False, max_gain=1.0, min_gain=0.0, max_cost=1.0, min_cost=1.0, max_n=1000):
   
     logging.basicConfig(filename='cwl.log', level=logging.DEBUG)
     logging.info("Processing: {} using gain: {} and costs: {}".format(results_file, gain_file, cost_file))
     logging.info("Max Gain: {} Max Cost: {} Min Cost: {} Max N: {}".format(max_gain, max_cost, min_cost, max_n))
+    if args.residuals:
+        logging.info("Residuals are being computed assuming max gain is: {}".format(max_gain))
     qrh = TrecQrelHandler(gain_file)
-    qrh.validate_gains(max_gain)
+    qrh.validate_gains(min_gain=min_gain, max_gain=max_gain)
     costs = None
     # read in cost file - if cost file exists
     if cost_file:
@@ -109,7 +115,7 @@ def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=No
     curr_topic_id = None
     ranking_maker = None
 
-    if colnames:
+    if col_names:
         if residuals:
             print("Topic\tMetric\tEU\tETU\tEC\tETC\tED\tResEU\tResETU\tResEC\tResETC\tResED")
         else:
@@ -161,4 +167,4 @@ if __name__ == "__main__":
     check_file_exists(args.metrics_file)
 
     main(args.result_file, args.gain_file, args.cost_file, args.metrics_file, args.bib_file,
-         args.colnames, args.residuals, args.max_gain, args.max_cost, args.min_cost, args.max_depth)
+         args.colnames, args.residuals, args.max_gain, args.min_gain, args.max_cost, args.min_cost, args.max_depth)

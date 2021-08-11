@@ -10,9 +10,8 @@ presented in the aforementioned research paper: NERReq{8, 9, 10, 11}.
 
 Note that NERReq8 and NERReq9 are designed to be truncated at k, whereas
 NRReq10 runs to full depth according to the parameter phi (akin to RBP) and
-NRReq11 runs to full depth according to the parameter T (akin to INSQ).
+NRReq11 runs to full depth according to the parameter T (akin to INST).
 '''
-
 
 
 # Option One (Equation 8)
@@ -24,7 +23,7 @@ class NERReq8CWLMetric(CWLMetric):
 
     def __init__(self, k):
         super().__init__()
-        self.metric_name = "NERR-EQ8@{0}".format(k)
+        self.metric_name = "NERR-EQ8@k={0}".format(k)
         self.k = k
         self.bibtex = """
         @inproceedings{Azzopardi:2021:ECE:3471158.3472239,
@@ -49,7 +48,6 @@ class NERReq8CWLMetric(CWLMetric):
         return np.array(cvec)
 
 
-
 # Option Two (Equation 9)
 class NERReq9CWLMetric(CWLMetric):
 
@@ -57,10 +55,9 @@ class NERReq9CWLMetric(CWLMetric):
     MINGAIN = 0.0
     MAXGAIN = 1.0
 
-
     def __init__(self, k):
         super().__init__()
-        self.metric_name = "NERR-EQ9@{0}".format(k)
+        self.metric_name = "NERR-EQ9@k={0}".format(k)
         self.k = k
         self.bibtex = """
         @inproceedings{Azzopardi:2021:ECE:3471158.3472239,
@@ -86,7 +83,6 @@ class NERReq9CWLMetric(CWLMetric):
         return np.array(cvec)
 
 
-
 # Option Three (Equation 10)
 class NERReq10CWLMetric(CWLMetric):
 
@@ -94,9 +90,9 @@ class NERReq10CWLMetric(CWLMetric):
     MINGAIN = 0.0
     MAXGAIN = 1.0
 
-    def __init__(self, phi = 0.9):
+    def __init__(self, phi=0.9):
         super().__init__()
-        self.metric_name = "NERR-EQ10@{0}".format(phi)
+        self.metric_name = "NERR-EQ10@phi={0}".format(phi)
         self.phi = phi
         self.bibtex = """
         @inproceedings{Azzopardi:2021:ECE:3471158.3472239,
@@ -121,7 +117,6 @@ class NERReq10CWLMetric(CWLMetric):
         return np.array(cvec)
 
 
-
 # Option Four (Equation 11)
 class NERReq11CWLMetric(CWLMetric):
 
@@ -129,10 +124,9 @@ class NERReq11CWLMetric(CWLMetric):
     MINGAIN = 0.0
     MAXGAIN = 1.0
 
-
-    def __init__(self, T = 1.0):
+    def __init__(self, T=1.0):
         super().__init__()
-        self.metric_name = "NERR-EQ11@{0}".format(T)
+        self.metric_name = "NERR-EQ11@T={0}".format(T)
         self.T = T
         self.bibtex = """
         @inproceedings{Azzopardi:2021:ECE:3471158.3472239,

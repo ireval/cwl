@@ -41,10 +41,10 @@ hb and hc are therefore scaling parameters.
 
 class BPMCWLMetric(CWLMetric):
 
-    def __init__(self, T=1, K=10):
+    def __init__(self, T=1.0, K=10):
         CWLMetric.__init__(self)
         # super(CWLMetric, self).__init__()
-        self.metric_name = "BPM-Static-T={0}-K={1}".format(T,K)
+        self.metric_name = "BPM-Static-T={0}-K={1}".format(T, K)
         self.T = T # E_b the total amount of benefit desired
         self.K = K # E_c the total amount of cost or documents willing to be examined
         self.bibtex = """

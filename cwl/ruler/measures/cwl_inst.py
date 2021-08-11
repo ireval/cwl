@@ -15,7 +15,7 @@ class INSTCWLMetric(CWLMetric):
     MINGAIN = 0.0
     MAXGAIN = 1.0
 
-    def __init__(self, T = 1.0):
+    def __init__(self, T=1.0):
         super().__init__()
         self.metric_name = "INST-T={0}    ".format(T)
         self.T = T
