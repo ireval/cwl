@@ -72,7 +72,7 @@ def parse_args():
     arg_parser.add_argument("--max_gain", help="Maximum gain associated with an item used for computing residuals"
                                                " and checking gain input file. "
                                                "(default=1.0)", required=False, default=1.0, type=float)
-    arg_parser.add_argument("--min_gain", help="Maximum gain associated with an item used"
+    arg_parser.add_argument("--min_gain", help="Minimum gain associated with an item used"
                                                " for checking gain input file. "
                                                "(default=0.0)", required=False, default=0.0, type=float)
     arg_parser.add_argument("--max_cost", help="Maximum cost associated with an item. Used for computing residuals. "
