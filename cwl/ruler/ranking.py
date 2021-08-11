@@ -1,7 +1,9 @@
 import numpy as np
 
+
 class Ranking(object):
-    def __init__(self, topic_id, gains, costs, max_gain=1.0, max_cost=1.0, min_cost=1.0, max_n=1000):
+
+    def __init__(self, topic_id, gains, costs, max_gain=1.0, min_gain=0.0, max_cost=1.0, min_cost=1.0, max_n=1000):
         """
         The ranking object encapsulates the data about the items in the ranked list.
         The gains and costs vectors should only be accessed through the two getter methods
@@ -10,6 +12,7 @@ class Ranking(object):
         :param gains: a vector of floats to represent the gain associated with each item in the list
         :param costs: a vector of floats to represent the cost of each item in the list
         :param max_gain: float that is greater than zero
+        :param min_gain: float that is greater than zero
         :param max_cost: float that is greater than zero (and greater to or equal to min_cost)
         :param min_cost: float that is greater than zero (no free lunches)
         """
@@ -19,7 +22,7 @@ class Ranking(object):
         self.total_qrel_gain = 0.0
         self.total_qrel_rels = 0.0
         self.max_gain = max_gain
-        self.min_gain = 0.0
+        self.min_gain = min_gain
         self.max_cost = max_cost
         self.min_cost = min_cost
         self.n = max_n
@@ -101,7 +104,7 @@ class RankingMaker(object):
     """
     This helper class builds Rankings
     """
-    def __init__(self, topic_id, gain_handler, cost_dict=None, max_gain=1.0, max_cost=1.0, min_cost=1.0, max_n=1000):
+    def __init__(self, topic_id, gain_handler, cost_dict=None, max_gain=1.0, min_gain=0.0, max_cost=1.0, min_cost=1.0, max_n=1000):
         """
         Iteratively builds up the ranked list of items (via the add function) then returns the final ranking
         by calling get_ranking
@@ -120,7 +123,7 @@ class RankingMaker(object):
         self._gains = []
         self._costs = []
         self.max_gain = max_gain
-        self.min_gain = 0.0
+        self.min_gain = min_gain
         self.max_cost = max_cost
         self.min_cost = min_cost
         self.show_report = False
@@ -159,7 +162,7 @@ class RankingMaker(object):
         Creates and returns a Ranking given the gains and costs added to the ranked lists.
         :return: ruler.ranking.Ranking
         """
-        ranking = Ranking(self.topic_id, self._gains, self._costs, self.max_gain, self.max_cost, self.min_cost, self.max_n)
+        ranking = Ranking(self.topic_id, self._gains, self._costs, self.max_gain, self.min_gain, self.max_cost, self.min_cost, self.max_n)
         ranking.total_qrel_rels = self.gain_handler.get_total_rels(self.topic_id)
         ranking.total_qrel_gain = self.gain_handler.get_total_gains(self.topic_id)
         return ranking
