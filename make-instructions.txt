@@ -1,0 +1,19 @@
+Update verision number and any requirements in:
+
+	setup.py
+
+Create the source distribution:
+
+	python setup.py sdist
+
+Make sure twine is installed (pip install twine) and then do the upload:
+
+	twine upload dist/*
+
+You will need your username and password for PyPi.
+
+To see if the changes worked you can upgrade with:
+
+	pip install cwl-eval --upgrade
+
+
