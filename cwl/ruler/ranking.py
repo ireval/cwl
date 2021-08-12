@@ -1,10 +1,9 @@
 import numpy as np
 
-MAX_N = 1000
-
 
 class Ranking(object):
-    def __init__(self, topic_id, gains, costs, max_gain=1.0, max_cost=1.0, min_cost=1.0):
+
+    def __init__(self, topic_id, gains, costs, max_gain=1.0, min_gain=0.0, max_cost=1.0, min_cost=1.0, max_n=1000):
         """
         The ranking object encapsulates the data about the items in the ranked list.
         The gains and costs vectors should only be accessed through the two getter methods
@@ -13,6 +12,7 @@ class Ranking(object):
         :param gains: a vector of floats to represent the gain associated with each item in the list
         :param costs: a vector of floats to represent the cost of each item in the list
         :param max_gain: float that is greater than zero
+        :param min_gain: float that is greater than zero
         :param max_cost: float that is greater than zero (and greater to or equal to min_cost)
         :param min_cost: float that is greater than zero (no free lunches)
         """
@@ -22,10 +22,10 @@ class Ranking(object):
         self.total_qrel_gain = 0.0
         self.total_qrel_rels = 0.0
         self.max_gain = max_gain
-        self.min_gain = 0.0
+        self.min_gain = min_gain
         self.max_cost = max_cost
         self.min_cost = min_cost
-        self.n = MAX_N
+        self.n = max_n
         # Calculates a lower bound on the total gain and total relevant items
         # For metrics like AP to be computed accurately, these values need to be
         # manually set after creating the ranking i.e. set w.r.t the QRELs file
@@ -39,11 +39,11 @@ class Ranking(object):
         # pad out the vector to size n
         # convert all NaNs to min (worse case) or max (best case)
         if worse_case:
-            gains = self._pad_trunc_vector(self._gains, MAX_N, self.min_gain)
+            gains = self._pad_trunc_vector(self._gains, self.n, self.min_gain)
             gains[np.isnan(gains)] = self.min_gain
             return gains
         else:
-            gains = self._pad_trunc_vector(self._gains, MAX_N, self.max_gain)
+            gains = self._pad_trunc_vector(self._gains, self.n, self.max_gain)
             gains[np.isnan(gains)] = self.max_gain
             return gains
 
@@ -51,11 +51,11 @@ class Ranking(object):
         # pad out the vector to size n
         # convert all NaNs to max (worse case) or min (best case)
         if worse_case:
-            costs = self._pad_trunc_vector(self._costs, MAX_N, self.max_cost)
+            costs = self._pad_trunc_vector(self._costs, self.n, self.max_cost)
             costs[np.isnan(costs)] = self.max_cost
             return costs
         else:
-            costs = self._pad_trunc_vector(self._costs, MAX_N, self.min_cost)
+            costs = self._pad_trunc_vector(self._costs, self.n, self.min_cost)
             costs[np.isnan(costs)] = self.min_cost
             return costs
 
@@ -104,7 +104,7 @@ class RankingMaker(object):
     """
     This helper class builds Rankings
     """
-    def __init__(self, topic_id, gain_handler, cost_dict=None, max_gain=1.0, max_cost=1.0, min_cost=1.0):
+    def __init__(self, topic_id, gain_handler, cost_dict=None, max_gain=1.0, min_gain=0.0, max_cost=1.0, min_cost=1.0, max_n=1000):
         """
         Iteratively builds up the ranked list of items (via the add function) then returns the final ranking
         by calling get_ranking
@@ -123,10 +123,11 @@ class RankingMaker(object):
         self._gains = []
         self._costs = []
         self.max_gain = max_gain
-        self.min_gain = 0.0
+        self.min_gain = min_gain
         self.max_cost = max_cost
         self.min_cost = min_cost
         self.show_report = False
+        self.max_n = max_n
 
     def add(self, doc_id, element_type):
         gain = self.gain_handler.get_value_if_exists(self.topic_id, doc_id)
@@ -161,7 +162,7 @@ class RankingMaker(object):
         Creates and returns a Ranking given the gains and costs added to the ranked lists.
         :return: ruler.ranking.Ranking
         """
-        ranking = Ranking(self.topic_id, self._gains, self._costs, self.max_gain, self.max_cost, self.min_cost)
+        ranking = Ranking(self.topic_id, self._gains, self._costs, self.max_gain, self.min_gain, self.max_cost, self.min_cost, self.max_n)
         ranking.total_qrel_rels = self.gain_handler.get_total_rels(self.topic_id)
         ranking.total_qrel_gain = self.gain_handler.get_total_gains(self.topic_id)
         return ranking

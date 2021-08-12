@@ -4,9 +4,6 @@ import logging
 
 logging.basicConfig(filename='cwl.log', level=logging.DEBUG)
 
-MAXN = 1000
-
-
 class CWLMetric(object):
 
     def __init__(self):
@@ -168,5 +165,19 @@ class CWLMetric(object):
         if len(vec1) < n:
             vec1 = np.pad(vec1, (0, n-len(vec1)), 'constant', constant_values=val)
         return vec1
+
+    def validate_gain_range(self, min_allowed_gain, max_allowed_gain, gain_vec):
+        """
+        Checks that the gain vector does not violate any metric assumptions
+        These assumptions (about the min or max gain) should be provided by
+        the calling metric class.
+        """
+        if np.min(gain_vec) < min_allowed_gain:
+            raise ValueError("Supplied gain values violate metric assumptions: Metric = {}.\n "
+                             "The minimum allowable gain for this metric is: {}.".format(self.name(), min_allowed_gain))
+        if np.max(gain_vec) > max_allowed_gain:
+            raise ValueError("Supplied gain values ({}) violate metric assumptions: Metric = {}.\n "
+                             "The maximum allowable gain for this "
+                             "metric is: {}.".format(np.max(gain_vec), self.name(), max_allowed_gain))
 
 

@@ -11,7 +11,11 @@ depending on whether gain is binary (0,1) or graded (0..1.0)
 
 class INSTCWLMetric(CWLMetric):
 
-    def __init__(self, T = 1.0):
+    # INST requires gains to be in range [0, 1]
+    MINGAIN = 0.0
+    MAXGAIN = 1.0
+
+    def __init__(self, T=1.0):
         super().__init__()
         self.metric_name = "INST-T={0}    ".format(T)
         self.T = T
@@ -35,6 +39,7 @@ class INSTCWLMetric(CWLMetric):
 
     def c_vector(self, ranking, worse_case=True):
         gains = ranking.get_gain_vector(worse_case)
+        self.validate_gain_range(self.MINGAIN, self.MAXGAIN, gains)
         c_gains = np.cumsum(gains)
         cvec = []
         for i in range(0, len(c_gains)):

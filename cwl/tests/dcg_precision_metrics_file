@@ -1,0 +1,8 @@
+PrecisionCWLMetric(1)
+PrecisionCWLMetric(5)
+PrecisionCWLMetric(10)
+PrecisionCWLMetric(20)
+NDCGCWLMetric(1)
+NDCGCWLMetric(5)
+NDCGCWLMetric(10)
+NDCGCWLMetric(20)

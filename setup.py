@@ -5,7 +5,7 @@ with open('README.md', 'r') as f:
 
 setuptools.setup(
     name='cwl-eval',
-    version='1.0.8',
+    version='1.0.9',
     
     scripts=['cwl-eval'],
     

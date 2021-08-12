@@ -23,8 +23,8 @@ towards T or A respectively, and fall back to the default b1/b2 intercepts. i.e.
 IFTGoalCWLMetric implements the Goal only variant
 IFTRateCWLMetric implements the Rate only variant
 IFTGoalRateCWLMetric implements the Goal and Rate variant - which was shown to be the most accurate in Azzopardi et al.
-
 """
+
 
 class IFTGoalCWLMetric(CWLMetric):
     def __init__(self, T, b1, R1):

@@ -45,13 +45,18 @@ If you have used `git clone` to install the framework, then you will need to run
 
 - -r: Add -r flag to also output residuals for each measurement.
 
+- --max_n <value>: Specify the depth of the calculation of the metrics (default=1000). 
+
+- --max_gain <value>: Specify the maximum value of the gain (default=1.0). Note some metrics have restrictions on the maximum allowable value. This is also used when computing the residuals.
+
+- --min_gain <value>: Specify the minimum value of the gain (default=0.0). Note some metrics have restrictions on the minimum allowable value.
+
 
 
 **Example without using a cost file**
 When no costs are specified the cost per item is assumed to be 1.0, and EC and I will be equal.
 
     cwl-eval qrel_file result_file
-
 
 
 **Example with using a cost file**
@@ -134,6 +139,10 @@ Costs can be specified in whatever unit is desired. i.e seconds, characters, wor
 - IFT-C1 - Information Foraging Theory (Goal)
 - IFT-C2 - Information Foraging Theory (Rate)
 - IFT-C1-C2 - Information Foraging Theory (Goal and Rate)
+- NERREq8 - Not/Nearly ERR(Eq8)@k using gain based stopping with truncation k
+- NERREq9 - Not/Nearly ERR(Eq9)@k using gain based stopping and discount with truncation k
+- NERREq10 - Not/Nearly ERR(Eq10)@phi using gain based stopping and RBP patience (phi)
+- NERREq11 - Not/Nearly ERR(Eq11)@T using gain based stopping and INST Goal (T)
 
 
 
@@ -225,38 +234,38 @@ defined in `ruler/measures/cwl_ruler.py`
 If the metrics_file is specified, CWL Eval will instantiate and use the metrics listed.
 An example test_metrics_file is provided, which includes the following:
 
-    PrecisionCWLMetric(1)
-    PrecisionCWLMetric(5)
-    PrecisionCWLMetric(10)
-    PrecisionCWLMetric(20)
-    RBPCWLMetric(0.9)
-    NDCGCWLMetric(10)
+    PrecisionCWLMetric(k=1)
+    PrecisionCWLMetric(k=5)
+    PrecisionCWLMetric(k=10)
+    PrecisionCWLMetric(k=20)
+    RBPCWLMetric(theta=0.9)
+    NDCGCWLMetric(k=10)
     RRCWLMetric()
     APCWLMetric()
-    INSTCWLMetric(1)
-    INSQCWLMetric(1)
-    BPMCWLMetric(1,1000)
-    BPMCWLMetric(1000,10)
-    BPMCWLMetric(1.2,10)
-    BPMDCWLMetric(1,1000)
-    BPMDCWLMetric(1000,10)
-    BPMDCWLMetric(1.2,10)
-    UMeasureCWLMetric(50)
-    UMeasureCWLMetric(10)
-    TBGCWLMetric(22)
-    IFTGoalCWLMetric(2.0, 0.9, 1)
-    IFTGoalCWLMetric(2.0, 0.9, 10)
-    IFTGoalCWLMetric(2.0, 0.9, 100)
-    IFTRateCWLMetric(0.2, 0.9, 1)
-    IFTRateCWLMetric(0.2, 0.9, 10)
-    IFTRateCWLMetric(0.2, 0.9, 100)
-    IFTGoalRateCWLMetric(2.0,0.9,10, 0.2, 0.9, 10)
-    IFTGoalRateCWLMetric(2.0,0.9,100, 0.2, 0.9, 100)
+    INSTCWLMetric(T=1.0)
+    INSQCWLMetric(T=1.0)
+    BPMCWLMetric(T=1.0,K=20)
+    BPMCWLMetric(T=2.0,K=10)
+    BPMDCWLMetric(T=1,20)
+    BPMDCWLMetric(T=2.0,K=10)
+    UMeasureCWLMetric(L=50)
+    UMeasureCWLMetric(L=10)
+    TBGCWLMetric(halflife=22)
+    IFTGoalCWLMetric(T=2.0, b1=0.9, R1=10)
+    IFTGoalCWLMetric(T=2.0, b1=0.9, R1=100)
+    IFTRateCWLMetric(A=0.2, b2=0.9, R2=10)
+    IFTRateCWLMetric(A=0.2, b2=0.9, R2=100)
+    IFTGoalRateCWLMetric(T=2.0, b1=0.9, R1=10, A=0.2, b2=0.9, R2=10)
+    IFTGoalRateCWLMetric(T=2.0, b1=0.9, R1=100, A=0.2, b2=0.9, R2=100)
+    NERReq8CWLMetric(k=10)
+    NERReq9CWLMetric(k=10)
+    NERReq10CWLMetric(phi=0.8)
+    NERReq11CWLMetric(T=2.0)
 
 To specify which metric you desire, inspect the metrics classes in `ruler/measures/`
 to see what metrics are available, and how the parameterize them.
 
-For example if you wanted Precision Based Measures then you can list them as follows:
+For example if you only wanted Precision Based Measures then you can list them as follows:
 
     PrecisionCWLMetric(1)
     PrecisionCWLMetric(2)
@@ -279,7 +288,7 @@ For example if you wanted Precision Based Measures then you can list them as fol
     PrecisionCWLMetric(19)
     PrecisionCWLMetric(20)
 
-While if you wanted Rank Biased Precision Measures, then you can vary the patience parameter:
+While if you only wanted Rank Biased Precision Measures, then you can vary the patience parameter:
 
     RBPCWLMetric(0.1)
     RBPCWLMetric(0.2)

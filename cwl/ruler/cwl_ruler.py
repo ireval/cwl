@@ -14,6 +14,7 @@ from cwl.ruler.measures.cwl_tbg import *
 from cwl.ruler.measures.cwl_bpm import *
 from cwl.ruler.measures.cwl_umeasure import *
 from cwl.ruler.measures.cwl_ift import *
+from cwl.ruler.measures.cwl_nerr import *
 from cwl.ruler.ranking import Ranking
 
 class CWLRuler(object):
