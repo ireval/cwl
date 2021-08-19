@@ -2,7 +2,7 @@ import math
 import numpy as np
 import logging
 
-logging.basicConfig(filename='cwl.log', level=logging.DEBUG)
+logger = logging.getLogger('cwl')
 
 class CWLMetric(object):
 
@@ -47,11 +47,11 @@ class CWLMetric(object):
         :return: returns the L vector probabilities
         """
         cvec = self.c_vector(ranking, worse_case)
-        logging.debug("{0} {1} {2} {3}".format(ranking.topic_id, self.name(), "cvec", cvec[0:11]))
+        logger.debug("{0} {1} {2} {3}".format(ranking.topic_id, self.name(), "cvec", cvec[0:11]))
         cshift = np.append(np.array([1.0]), cvec[0:-1])
         lvec = np.cumprod(cshift)
         lvec = np.multiply(lvec, (np.subtract(np.ones(len(cvec)), cvec)))
-        logging.debug("{0} {1} {2} {3}".format(ranking.topic_id, self.name(), "lvec", lvec[0:11]))
+        logger.debug("{0} {1} {2} {3}".format(ranking.topic_id, self.name(), "lvec", lvec[0:11]))
         return lvec
 
     def w_vector(self, ranking, worse_case=True):
@@ -69,7 +69,7 @@ class CWLMetric(object):
         w1 = np.divide(1.0, np.sum(cvec_prod))
         w_tail = np.multiply(cvec_prod[1:len(cvec_prod)], w1)
         wvec = np.append(w1, w_tail)
-        logging.debug("{0} {1} {2} {3}".format(ranking.topic_id, self.name(), "wvec", wvec[0:11]))
+        logger.debug("{0} {1} {2} {3}".format(ranking.topic_id, self.name(), "wvec", wvec[0:11]))
         return wvec
 
     def measure(self, ranking):
