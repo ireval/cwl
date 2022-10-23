@@ -104,7 +104,7 @@ def main(results_file, gain_file, cost_file=None, metrics_file=None, bib_file=No
     logger.addHandler(logging.FileHandler('cwl.log'))
     logger.info("Processing: {} using gain: {} and costs: {}".format(results_file, gain_file, cost_file))
     logger.info("Max Gain: {} Max Cost: {} Min Cost: {} Max N: {}".format(max_gain, max_cost, min_cost, max_n))
-    if args.residuals:
+    if residuals:
         logger.info("Residuals are being computed assuming max gain is: {}".format(max_gain))
     qrh = TrecQrelHandler(gain_file)
     qrh.validate_gains(min_gain=min_gain, max_gain=max_gain)
