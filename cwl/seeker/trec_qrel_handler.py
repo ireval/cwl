@@ -33,11 +33,11 @@ class TrecQrelHandler(TopicDocumentFileHandler):
         for topic_id in all_gains:
             for gain in all_gains[topic_id].values():
                 if gain > max_gain:
-                    raise ValueError("Detected a gain value ({})  greater than the maximum ({}).\n"
-                                     "Please check your input gain file or set max_gain to: {} ".format(gain, max_gain, gain))
+                    raise ValueError(f"Detected a gain value ({gain})  greater than the maximum ({max_gain}).\n"
+                                     "Please check your input gain file")
                 if gain < min_gain:
-                    raise ValueError("Detected a gain value ({}) less than minimum ({}).\n "
-                                     "Please check your input gain file or set min_gain to: {}".format(gain, min_gain, gain))
+                    raise ValueError(f"Detected a gain value ({gain}) less than minimum ({min_gain}).\n "
+                                     "Please check your input gain file.")
  
     def get_total_gains(self, topic):
 

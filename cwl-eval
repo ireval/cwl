@@ -34,4 +34,4 @@ if __name__ == '__main__':
     cwl_eval.check_file_exists(args.metrics_file)
 
     cwl_eval.main(args.result_file, args.gain_file, args.cost_file, args.metrics_file, args.bib_file,
-                  args.colnames, args.residuals, args.max_gain, args.max_cost, args.min_cost, args.max_depth)
+                  args.colnames, args.residuals, args.max_gain, args.min_gain, args.max_cost, args.min_cost, args.max_depth)
